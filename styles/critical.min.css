@@ -1,0 +1,4 @@
+.critical.true {background: #99FF99}
+.critical.mostlyTrue {background: #99FFFF}
+.critical.mostlyFalse {background: #FFFF99}
+.critical.false {background: #FF9999}

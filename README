@@ -1,0 +1,21 @@
+== INSTALL ==
+cp conf-default.php conf.php
+edit conf.php
+php install.php
+php datarake.php
+
+
+== UPDATE ==
+php install.php
+
+
+== DATA REFRESH  == 
+// CAUTION: this may delete data you wanted to keep -- be sure to backup the critical schema if there are any important rows
+php datarake.php
+
+
+==Fake lightweight "Framework"==
+Models are in the models folder
+No controllers, but instead actions are autorouted to the proper page
+URL style is "something.com/?p=[page]&a=[action]
+DIR style is /pages/[page]/[action].php

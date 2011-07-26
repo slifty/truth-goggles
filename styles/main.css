@@ -1,0 +1,44 @@
+* { margin: 0px; padding: 0px; }
+
+
+/* HTML Elements */
+body { font-family: arial;
+	background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(190,192,194)),
+    color-stop(0.66, rgb(237,237,237))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(190,192,194) 0%,
+    rgb(237,237,237) 66%
+);
+
+	 color: #000000 }
+
+label {cursor: pointer;}
+
+h1 { }
+
+h2 { margin-top: 20px; }
+
+a { color: #661111; text-decoration: none; font-weight: bold; font-size: .9em;}
+
+/* Core Elements */
+#container { width: 900px; margin: auto; padding: 10px;}
+
+#header {height: 100px; width: 100%;}
+
+#logo { height: 50px; width: 200px; float: left;}
+
+#login { float:left; margin-left: 400px;}
+
+#login form ul { list-style: none; }
+
+#login form ul label { float:left; width:100px;}
+
+#main { min-height: 500px;}
+
+#footer {}
