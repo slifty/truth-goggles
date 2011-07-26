@@ -45,6 +45,11 @@ $claim1 = new Claim();
 $claim1->setContent("The U.S. government calculates inflation without adding in the price of food and energy");
 $claim1->save();
 
+$claim1 = new Claim();
+$claim1->setContent("Social Security recipients are not receiving a cost-of-living adjustment because the government");
+$claim1->save();
+
+
 // Add in some temporary snippets
 $snippet1 = new Snippet();
 $snippet1->setClaimID($claim1->getItemID());
@@ -53,18 +58,16 @@ $snippet1->setContext("While advising his Fox News viewers to talk about inflati
 $snippet1->setContent("the government removed food and energy prices from its measure of inflation to hide rising prices");
 $snippet1->save();
 
-$snippet1 = new Snippet();
-$snippet1->setClaimID($claim1->getItemID());
-$snippet1->setURL("http://kaystreet.wordpress.com/2010/11/27/");
-$snippet1->setContext("Beck: Government removed “food and energy” from inflation estimate so that people wouldn’t “recognize how bad things actually were.” From the November 22 edition of Fox News’ Glenn Beck:");
-$snippet1->setContent("Government removed “food and energy” from inflation estimate so that people wouldn’t “recognize how bad things actually were.”");
-$snippet1->save();
-
 
 // Add in some temporary verdicts
 $verdict1 = new Verdict();
 $verdict1->setClaimID($claim1->getItemID());
 $verdict1->setResultClassID($RC_mostlyFalse->getItemID());
+$verdict1->save();
+
+$verdict1 = new Verdict();
+$verdict1->setClaimID($claim1->getItemID());
+$verdict1->setResultClassID($RC_true->getItemID());
 $verdict1->save();
 
 ?>
