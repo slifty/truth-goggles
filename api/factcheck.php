@@ -9,7 +9,7 @@
 	
 	// Scan the snippet DB for low hanging fruit
 	$snippets = Snippet::getSnippetsByContext($context);
-	
+		
 	// Run through the snippets and generate verdict JS Objects
 	foreach($snippets as $snippet) {
 		$verdicts = $snippet->getClaim()->getVerdicts();
