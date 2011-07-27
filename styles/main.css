@@ -26,18 +26,14 @@ h2 { margin-top: 20px; }
 
 a { color: #661111; text-decoration: none; font-weight: bold; font-size: .9em;}
 
+ul { margin-left: 20px; }
+
 /* Core Elements */
 #container { width: 900px; margin: auto; padding: 10px;}
 
 #header {height: 100px; width: 100%;}
 
 #logo { height: 50px; width: 200px; float: left;}
-
-#login { float:left; margin-left: 400px;}
-
-#login form ul { list-style: none; }
-
-#login form ul label { float:left; width:100px;}
 
 #main { min-height: 500px;}
 
