@@ -110,7 +110,9 @@ class Snippet extends FactoryObject {
 							   SET snippets.claim_id = ".DBConn::clean($this->getClaimID()).",
 							   AND snippets.url = ".DBConn::clean($this->getURL()).",
 							   AND snippets.content = ".DBConn::clean($this->getContent()).",
-							   AND snippets.context = ".DBConn::clean($this->getContext())."
+							   AND snippets.content_code = ".DBConn::clean($this->getContentCode()).",
+							   AND snippets.context = ".DBConn::clean($this->getContext()).",
+							   AND snippets.context_code = ".DBConn::clean($this->getContextCode())."
 							 WHERE snippets.id = ".DBConn::clean($this->getItemID());
 							
 			$mysqli->query($queryString) or print($mysqli->error);
@@ -121,12 +123,16 @@ class Snippet extends FactoryObject {
 									snippets.claim_id,
 									snippets.url,
 									snippets.content,
-									snippets.context)
+									snippets.content_code,
+									snippets.context,
+									snippets.context_code)
 							VALUES (0,
 									".DBConn::clean($this->getClaimID()).",
 									".DBConn::clean($this->getURL()).",
 									".DBConn::clean($this->getContent()).",
-									".DBConn::clean($this->getContext()).")";
+									".DBConn::clean($this->getContentCode()).",
+									".DBConn::clean($this->getContext()).",
+									".DBConn::clean($this->getContextCode()).")";
 			
 			$mysqli->query($queryString) or print($mysqli->error);
 			$this->setItemID($mysqli->insert_id);
@@ -148,13 +154,17 @@ class Snippet extends FactoryObject {
 	
 	
 	# Getters
-	public function getClaimID() { return $this->claimID;}
+	public function getClaimID() { return $this->claimID; }
 	
-	public function getURL() { return $this->url;}
+	public function getURL() { return $this->url; }
 	
-	public function getContent() { return $this->content;}
+	public function getContent() { return $this->content; }
 	
-	public function getContext() { return $this->context;}
+	public function getContentCode() { return Snippet::codify($this->content); }
+	
+	public function getContext() { return $this->context; }
+	
+	public function getContextCode() { return Snippet::codify($this->context); }
 
 	public function getClaim() {
 		if($this->claim != null)
@@ -164,26 +174,31 @@ class Snippet extends FactoryObject {
 	
 	
 	# Setters
-	public function setClaimID($int) { $this->claimID = $int;}
+	public function setClaimID($int) { $this->claimID = $int; }
 	
-	public function setURL($str) { $this->url = $str;}
+	public function setURL($str) { $this->url = $str; }
 	
-	public function setContent($str) { $this->content = $str;}
+	public function setContent($str) {$this->content = $str; }
 	
-	public function setContext($str) { $this->context = $str;}
+	public function setContext($str) { $this->context = $str; }
 	
 	
 	# Static Methods
 	public static function getSnippetsByContext($context) {
-		$queryString = "SELECT snippets.id
+		$queryString = "SELECT distinct snippets.id
 						  FROM snippets
-						 WHERE snippets.context = ".DBConn::clean($context)."
-							OR ".DBConn::clean($context)." LIKE concat('%',snippets.content,'%')";
+						 WHERE snippets.context_code = ".DBConn::clean(Snippet::codify($context))."
+							OR ".DBConn::clean(Snippet::codify($context))." LIKE concat('%',snippets.content_code,'%')";
 		return Snippet::getObjects($queryString);
 	}
 	
 	public static function getSnippetsByContent($content) {
 		return array();
+	}
+	
+	public static function codify($str) {
+		// Remove everything but letters and numbers:
+		return preg_replace("/[^A-Za-z0-9]/","",$str);
 	}
 	
 }

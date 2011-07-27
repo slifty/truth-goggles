@@ -10,6 +10,7 @@
 	$MYSQL_DB = "";
 
 	// Site Settings
-	global $SITEROOT;
-	$SITEROOT = "/~slifty/critical";
+	global $SITE_ROOT, $SITE_DOMAIN;
+	$SITE_ROOT = "";
+	$SITE_DOMAIN = "127.0.0.1";
 ?>

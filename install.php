@@ -90,6 +90,16 @@ switch($version) {
 		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
 		$mysqli->query("INSERT into appinfo (version) values('5');") or print($mysqli->error);
 		
+	case 5:
+		echo("Updating snippets table\n");
+		$mysqli->query("ALTER TABLE snippets
+					      ADD COLUMN content_code text AFTER content,
+					      ADD COLUMN context_code text AFTER context") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
+		$mysqli->query("INSERT into appinfo (version) values('6');") or print($mysqli->error);
+		
 	default:
 		echo("Finished updating the schema\n");
 }
