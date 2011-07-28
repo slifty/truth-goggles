@@ -45,9 +45,9 @@ $claim1 = new Claim();
 $claim1->setContent("The U.S. government calculates inflation without adding in the price of food and energy");
 $claim1->save();
 
-$claim1 = new Claim();
-$claim1->setContent("Social Security recipients are not receiving a cost-of-living adjustment because the government");
-$claim1->save();
+$claim2 = new Claim();
+$claim2->setContent("Social Security recipients are not receiving a cost-of-living adjustment because the government");
+$claim2->save();
 
 
 // Add in some temporary snippets
@@ -66,7 +66,7 @@ $verdict1->setResultClassID($RC_mostlyFalse->getItemID());
 $verdict1->save();
 
 $verdict1 = new Verdict();
-$verdict1->setClaimID($claim1->getItemID());
+$verdict1->setClaimID($claim2->getItemID());
 $verdict1->setResultClassID($RC_true->getItemID());
 $verdict1->save();
 
