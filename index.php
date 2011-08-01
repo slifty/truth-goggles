@@ -11,7 +11,7 @@
 		<div id="container">
 			<div id="header"></div>
 			<div id="main">
-				<p><a href="javascript:var%20criticalDomain='http://<?PHP echo($SITE_DOMAIN.$SITE_ROOT); ?>';var%20s=document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src=criticalDomain+'/critical.min.js';void(0);">Apply Truth Goggles</a> <-- Drag this to your toolbar!</p>
+				<p><a href="javascript:var%20criticalDomain='http://<?PHP echo($SITE_DOMAIN.$SITE_ROOT); ?>';var%20s=document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src=criticalDomain+'/critical.min.js';void(0);">Apply Truth Goggles</a> <-- Bookmark this link! (Drag it to your bookmarks)</p>
 				<br />
 				<p><b>While</b> advising his Fox News viewers to talk about inflation at their Thanksgiving dinners, Glenn Beck falsely claimed that the government removed food and energy prices from <b>its measure <i>of</i> inflation to hide rising prices, that a survey showed economists are “worried”</b> about inflation, and that Social Security recipients are not receiving a cost-of-living adjustment because the government “changed the calculation.”</p>
 				<br />

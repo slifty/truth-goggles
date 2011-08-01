@@ -1,4 +1,4 @@
-.critical {overflow: visible; color: #000000;}
+.critical {color: #000000;}
 .critical.true {background: #99FF99;}
 .critical.mostlyTrue {background: #99FFFF;}
 .critical.mostlyFalse {background: #FFFF99;}

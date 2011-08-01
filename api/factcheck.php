@@ -2,7 +2,7 @@
 	header('Content-type: text/javascript');
 	set_include_path("../");
 	include_once("models/Snippet.php");
-	$context = isset($_GET['context'])?$_GET['context']:"";
+	$context = utf8_decode(isset($_GET['context'])?$_GET['context']:"");
 	$callback = isset($_GET['callback'])?$_GET['callback']:"factcheck_callback";
 	$pid = isset($_GET['pid'])?$_GET['pid']:0;
 	$verdictsJS = array();
