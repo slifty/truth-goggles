@@ -1,6 +1,8 @@
 == INSTALL ==
 cp conf-default.php conf.php
 edit conf.php
+cp .htaccess-default .htaccess
+edit .htaccess
 php install.php
 php datarake.php
 
@@ -10,7 +12,7 @@ php install.php
 
 
 == DATA REFRESH  == 
-// CAUTION: this may delete data you wanted to keep -- be sure to backup the critical schema if there are any important rows
+// CAUTION: this may delete data you wanted to keep -- be sure to backup the schema if you want to retain your information
 php datarake.php
 
 

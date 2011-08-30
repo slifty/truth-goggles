@@ -1,10 +1,13 @@
-<?PHP require_once("conf.php");?>
+<?PHP
+	set_include_path($_SERVER['DOCUMENT_ROOT']);
+	require_once("conf.php");
+?>
 <html>
 	<head>
 		<title>Critical: Aiding in the audience's critical ability since 2011</title>
 		
-		<link rel="stylesheet" href="styles/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
-		<script src="scripts/jquery-1.5.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="<?PHP echo($SITE_ROOT);?>/styles/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script src="<?PHP echo($SITE_ROOT);?>/scripts/jquery-1.5.2.min.js" type="text/javascript" charset="utf-8"></script>
 		
 	</head>
 	<body>

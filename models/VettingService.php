@@ -8,10 +8,8 @@
 require_once("DBConn.php");
 require_once("FactoryObject.php");
 require_once("JSONObject.php");
-require_once("Claim.php");
-require_once("Verdict.php");
 
-class ResultClass extends FactoryObject implements JSONObject {
+class VettingService extends FactoryObject implements JSONObject {
 	
 	# Constants
 	
@@ -21,12 +19,10 @@ class ResultClass extends FactoryObject implements JSONObject {
 	
 	# Instance Variables
 	private $title; // str
-	private $description; // str
-	private $class; // str
+	private $url; // str
 	
 	
 	# Caches
-	private $result;
 	
 	
 	# FactoryObject Methods
@@ -38,8 +34,7 @@ class ResultClass extends FactoryObject implements JSONObject {
 			$dataArray = array();
 			$dataArray['itemID'] = 0;
 			$dataArray['title'] = "";
-			$dataArray['description'] = "";
-			$dataArray['class'] = "";
+			$dataArray['url'] = "";
 			$dataArrays[] = $dataArray;
 			return $dataArrays;
 		}
@@ -49,8 +44,7 @@ class ResultClass extends FactoryObject implements JSONObject {
 			$dataArray = array();
 			$dataArray['itemID'] = 0;
 			$dataArray['title'] = "";
-			$dataArray['description'] = "";
-			$dataArray['class'] = "";
+			$dataArray['url'] = "";
 			$dataArrays[] = $dataArray;
 			return $dataArrays;
 		}
@@ -59,12 +53,11 @@ class ResultClass extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$queryString = "SELECT result_classes.id AS itemID,
-							   result_classes.title AS title,
-							   result_classes.description AS description,
-							   result_classes.class AS class
-						  FROM result_classes
-						 WHERE result_classes.id IN (".$objectString.")";
+		$queryString = "SELECT vetting_services.id AS itemID,
+							   vetting_services.title AS title,
+							   vetting_services.url AS url
+						  FROM vetting_services
+						 WHERE vetting_services.id IN (".$objectString.")";
 		
 		$result = $mysqli->query($queryString)
 			or print($mysqli->error);
@@ -73,8 +66,7 @@ class ResultClass extends FactoryObject implements JSONObject {
 			$dataArray = array();
 			$dataArray['itemID'] = $resultArray['itemID'];
 			$dataArray['title'] = $resultArray['title'];
-			$dataArray['description'] = $resultArray['description'];
-			$dataArray['class'] = $resultArray['class'];
+			$dataArray['url'] = $resultArray['url'];
 			$dataArrays[] = $dataArray;
 		}
 		
@@ -85,8 +77,7 @@ class ResultClass extends FactoryObject implements JSONObject {
 	public function load($dataArray) {
 		parent::load($dataArray);
 		$this->title = isset($dataArray["title"])?$dataArray["title"]:"";
-		$this->description = isset($dataArray["description"])?$dataArray["description"]:"";
-		$this->class = isset($dataArray["class"])?$dataArray["class"]:"";
+		$this->url = isset($dataArray["url"])?$dataArray["url"]:"";
 	}
 	
 	
@@ -95,8 +86,7 @@ class ResultClass extends FactoryObject implements JSONObject {
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
 			"title": '.DBConn::clean($this->getTitle()).',
-			"description": '.DBConn::clean($this->getDescription()).',
-			"class": '.DBConn::clean($this->getClass()).'
+			"url": '.DBConn::clean($this->getURL()).'
 		}';
 		return $json;
 	}
@@ -114,24 +104,21 @@ class ResultClass extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$queryString = "UPDATE result_classes
-							   SET result_classes.title = ".DBConn::clean($this->getTitle()).",
-								   result_classes.description = ".DBConn::clean($this->getDescription()).",
-								   result_classes.class = ".DBConn::clean($this->getClass()).",
-							 WHERE result_classes.id = ".DBConn::clean($this->getItemID());
+			$queryString = "UPDATE vetting_services
+							   SET vetting_services.title = ".DBConn::clean($this->getTitle()).",
+								   vetting_services.url = ".DBConn::clean($this->getURL())."
+							 WHERE vetting_services.id = ".DBConn::clean($this->getItemID());
 							
 			$mysqli->query($queryString) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$queryString = "INSERT INTO result_classes
-								   (result_classes.id,
-									result_classes.title,
-									result_classes.description,
-									result_classes.class)
+			$queryString = "INSERT INTO vetting_services
+								   (vetting_services.id,
+									vetting_services.title,
+									vetting_services.url)
 							VALUES (0,
 									".DBConn::clean($this->getTitle()).",
-									".DBConn::clean($this->getDescription()).",
-									".DBConn::clean($this->getClass()).")";
+									".DBConn::clean($this->getURL()).")";
 			
 			$mysqli->query($queryString) or print($mysqli->error);
 			$this->setItemID($mysqli->insert_id);
@@ -146,8 +133,8 @@ class ResultClass extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$queryString = "DELETE FROM result_classes
-							  WHERE result_classes.id = ".DBConn::clean($this->getItemID());
+		$queryString = "DELETE FROM vetting_services
+							  WHERE vetting_services.id = ".DBConn::clean($this->getItemID());
 		$mysqli->query($queryString);
 	}
 	
@@ -155,17 +142,13 @@ class ResultClass extends FactoryObject implements JSONObject {
 	# Getters
 	public function getTitle() { return $this->title;}
 	
-	public function getDescription() { return $this->description;}
-	
-	public function getClass() { return $this->class;}
+	public function getURL() { return $this->url;}
 	
 	
 	# Setters
 	public function setTitle($str) { $this->title = $str;}
 	
-	public function setDescription($str) { $this->description = $str;}
-	
-	public function setClass($str) { $this->class = $str;}
+	public function setURL($str) { $this->url = $str;}
 	
 }
 

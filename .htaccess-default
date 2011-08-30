@@ -1,0 +1,14 @@
+# INSTRUCTIONS:
+#  Lines that need to be edited are enclosed with # EDIT # and # /EDIT #
+
+RewriteEngine On
+
+# EDIT #
+RewriteBase [SITE_ROOT]
+# /EDIT #
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^api/(.*) api.php?q=$1 [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*) index.php?q=$1 [QSA,L]

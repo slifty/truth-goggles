@@ -7,10 +7,12 @@
 ###
 require_once("DBConn.php");
 require_once("FactoryObject.php");
+require_once("JSONObject.php");
 require_once("Claim.php");
 require_once("ResultClass.php");
+require_once("VettingService.php");
 
-class Verdict extends FactoryObject {
+class Verdict extends FactoryObject implements JSONObject {
 	
 	# Constants
 	
@@ -21,6 +23,7 @@ class Verdict extends FactoryObject {
 	# Instance Variables
 	private $claimID; // int
 	private $resultClassID; //int
+	private $vettingServiceID; //int
 	private $url; // str
 	private $dateCreated; // timestamp
 	
@@ -28,7 +31,8 @@ class Verdict extends FactoryObject {
 	# Caches
 	private $result;
 	private $claim;
-	
+	private $vettingService;
+    
 	
 	# FactoryObject Methods
 	protected static function gatherData($objectString) {
@@ -40,6 +44,7 @@ class Verdict extends FactoryObject {
 			$dataArray['itemID'] = 0;
 			$dataArray['claimID'] = 0;
 			$dataArray['resultClassID'] = 0;
+			$dataArray['vettingServiceID'] = 0;
 			$dataArray['url'] = "";
 			$dataArray['dateCreated'] = 0;
 			$dataArrays[] = $dataArray;
@@ -52,6 +57,7 @@ class Verdict extends FactoryObject {
 			$dataArray['itemID'] = 0;
 			$dataArray['claimID'] = 0;
 			$dataArray['resultClassID'] = 0;
+			$dataArray['vettingServiceID'] = 0;
 			$dataArray['url'] = "";
 			$dataArray['dateCreated'] = 0;
 			$dataArrays[] = $dataArray;
@@ -64,7 +70,8 @@ class Verdict extends FactoryObject {
 		// Load the object data
 		$queryString = "SELECT verdicts.id AS itemID,
 							   verdicts.claim_id AS claimID,
-							   verdicts.result_class_id AS resultClassID,
+   							   verdicts.result_class_id AS resultClassID,
+   							   verdicts.vetting_service_id AS vettingServiceID,
 							   verdicts.url AS url,
 							   unix_timestamp(verdicts.date_created) as dateCreated
 						  FROM verdicts
@@ -78,6 +85,7 @@ class Verdict extends FactoryObject {
 			$dataArray['itemID'] = $resultArray['itemID'];
 			$dataArray['claimID'] = $resultArray['claimID'];
 			$dataArray['resultClassID'] = $resultArray['resultClassID'];
+			$dataArray['vettingServiceID'] = $resultArray['vettingServiceID'];
 			$dataArray['url'] = $resultArray['url'];
 			$dataArray['dateCreated'] = $resultArray['dateCreated'];
 			$dataArrays[] = $dataArray;
@@ -91,8 +99,22 @@ class Verdict extends FactoryObject {
 		parent::load($dataArray);
 		$this->claimID = isset($dataArray["claimID"])?$dataArray["claimID"]:0;
 		$this->resultClassID = isset($dataArray["resultClassID"])?$dataArray["resultClassID"]:0;
+		$this->vettingServiceID = isset($dataArray["vettingServiceID"])?$dataArray["vettingServiceID"]:0;
 		$this->url = isset($dataArray["url"])?$dataArray["url"]:"";
 		$this->dateCreated = isset($dataArray["dateCreated"])?$dataArray["dateCreated"]:0;
+	}
+	
+	
+	# JSONObject Methods
+	public function toJSON() {
+		$json = '{
+			"id": '.DBConn::clean($this->getItemID()).',
+			"url": '.DBConn::clean($this->getURL()).',
+			"date_created": '.DBConn::clean($this->getDateCreated()).',
+			"result_class": '.$this->getResultClass()->toJSON().',
+			"vetting_service": '.$this->getVettingService()->toJSON().'
+		}';
+		return $json;
 	}
 	
 	
@@ -111,7 +133,8 @@ class Verdict extends FactoryObject {
 			$queryString = "UPDATE verdicts
 							   SET verdicts.claim_id = ".DBConn::clean($this->getClaimID()).",
 								   verdicts.result_class_id = ".DBConn::clean($this->getResultClassID()).",
-								   verdicts.url = ".DBConn::clean($this->getURL()).",
+								   verdicts.vetting_service_id = ".DBConn::clean($this->getVettingServiceID()).",
+								   verdicts.url = ".DBConn::clean($this->getURL())."
 							 WHERE verdicts.id = ".DBConn::clean($this->getItemID());
 							
 			$mysqli->query($queryString) or print($mysqli->error);
@@ -121,11 +144,13 @@ class Verdict extends FactoryObject {
 								   (verdicts.id,
 									verdicts.claim_id,
 									verdicts.result_class_id,
+									verdicts.vetting_service_id,
 									verdicts.url,
 									verdicts.date_created)
 							VALUES (0,
 									".DBConn::clean($this->getClaimID()).",
 									".DBConn::clean($this->getResultClassID()).",
+									".DBConn::clean($this->getVettingServiceID()).",
 									".DBConn::clean($this->getURL()).",
 									NOW())";
 			
@@ -151,6 +176,8 @@ class Verdict extends FactoryObject {
 	# Getters
 	public function getClaimID() { return $this->claimID;}
 	
+	public function getVettingServiceID() { return $this->vettingServiceID;}
+	
 	public function getResultClassID() { return $this->resultClassID;}
 	
 	public function getURL() { return $this->url;}
@@ -169,12 +196,20 @@ class Verdict extends FactoryObject {
 		return $this->claim = Claim::getObject($this->getClaimID());
 	}
 	
+    public function getVettingService() {
+		if($this->vettingService != null)
+			return $this->vettingService;
+		return $this->vettingService = VettingService::getObject($this->getVettingServiceID());
+	}
+	
 	
 	# Setters
 	public function setClaimID($int) { $this->claimID = $int;}
 	
 	public function setResultClassID($int) { $this->resultClassID = $int;}
-	
+    
+	public function setVettingServiceID($int) { $this->vettingServiceID = $int;}
+    
 	public function setURL($str) { $this->url = $str;}
 	
 }

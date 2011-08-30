@@ -38,15 +38,26 @@ class DBConn {
 			$data = ltrim($data);
 			$data = rtrim($data);
 			//$data = htmlentities($data);
-			$data = nl2br($data, true);
+			//$data = nl2br($data, true);
+			// $dbConn = DBConn::connect();
+			// 			$data = $dbConn->real_escape_string($data);
 			
-			$dbConn = DBConn::connect();
-			$data = $dbConn->real_escape_string($data);
+			// Get rid of backslashes
+			$data = str_replace('\\','\\\\',$data);
+			
+			// Damn pesky carriage returns...
+			$data = str_replace("\r\n", "\n", $data);
+			$data = str_replace("\r", "\n", $data);
+			
+			// JSON requires new line characters be escaped
+			$data = str_replace("\n", "\\n", $data);
+			
+			$data = str_replace('"','\\"',$data);
 			
 			if($cleanType == DBConn::CLEAN_VALIDATION)
 				return $data;
 			else
-				return "'".$data."'";
+				return '"'.$data.'"';
 		} elseif (is_array($data)) {
 			foreach($data as $key => $val)
 				$data[$key] = DBConn::clean($val, $cleanType);

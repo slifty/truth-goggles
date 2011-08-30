@@ -7,9 +7,10 @@
 ###
 require_once("DBConn.php");
 require_once("FactoryObject.php");
+require_once("JSONObject.php");
 require_once("Claim.php");
 
-class Snippet extends FactoryObject {
+class Snippet extends FactoryObject implements JSONObject {
 	
 	# Constants
 	
@@ -94,6 +95,23 @@ class Snippet extends FactoryObject {
 	}
 	
 	
+	# JSONObject Methods
+	public function toJSON($contentStart=null, $contentLength=null) {
+		// TODO -- Find a more elegant way to have contentStart and contentLenght be a part of a snippet
+		
+		$json = '{
+			"id": '.DBConn::clean($this->getItemID()).',
+			"content": '.DBConn::clean($this->getContent()).',
+			"context": '.DBConn::clean($this->getContext()).',
+			"url": '.DBConn::clean($this->getURL()).',
+			"claim": '.$this->getClaim()->toJSON().'
+			'.(($contentStart)?', "content_start": '.DBConn::clean($contentStart):'').'
+			'.(($contentLength)?', "content_length": '.DBConn::clean($contentLength):'').'
+		}';
+		return $json;
+	}
+	
+	
 	# Data Methods
 	public function validate() {
 		return true;
@@ -165,7 +183,7 @@ class Snippet extends FactoryObject {
 	public function getContext() { return $this->context; }
 	
 	public function getContextCode() { return Snippet::codify($this->context); }
-
+	
 	public function getClaim() {
 		if($this->claim != null)
 			return $this->claim;

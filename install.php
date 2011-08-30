@@ -1,5 +1,5 @@
 <?php
-set_include_path("/");
+set_include_path($_SERVER['DOCUMENT_ROOT']);
 require_once("conf.php");
 require_once("models/DBConn.php");
 
@@ -14,7 +14,7 @@ if(!$mysqli || $mysqli->connect_error) {
 $result = $mysqli->query("select appinfo.version as version
 				  			from appinfo");
 
-if($result->num_rows == 0)
+if(!$result || $result->num_rows == 0)
 	$version = 0;
 else {
 	$resultArray = $result->fetch_assoc();
@@ -84,7 +84,7 @@ switch($version) {
 	case 4:
 		echo("Updating verdicts table\n");
 		$mysqli->query("ALTER TABLE verdicts
-					   CHANGE COLUMN result_id result_class_id int") or print($mysqli->error);
+					  CHANGE COLUMN result_id result_class_id int") or print($mysqli->error);
 		
 		echo("Updating app version\n");
 		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
@@ -99,6 +99,56 @@ switch($version) {
 		echo("Updating app version\n");
 		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
 		$mysqli->query("INSERT into appinfo (version) values('6');") or print($mysqli->error);
+		
+	case 6:
+		echo("Renaming claim_sources table to verdict_sources \n");
+		$mysqli->query("ALTER TABLE claim_sources
+			 				 RENAME vetting_services") or print($mysqli->error);
+		
+		echo("Updating verdicts table\n");
+		$mysqli->query("ALTER TABLE verdicts
+					  CHANGE COLUMN claim_source_id vetting_service_id int") or print($mysqli->error);
+		
+		echo("Creating contexts table\n");
+		$mysqli->query("CREATE TABLE contexts (id int auto_increment primary key,
+											claim_id int,
+											url varchar(255),
+											verdict_source_id int)") or print($mysqli->error);
+		
+		echo("Creating arguments table\n");
+		$mysqli->query("CREATE TABLE arguments (id int auto_increment primary key,
+											claim_id int,
+											argument text,
+											result_class_id int,
+											verdict_source_id int)") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
+		$mysqli->query("INSERT into appinfo (version) values('7');") or print($mysqli->error);
+		
+	case 7:
+		echo("Creating hodgepodge table\n");
+		$mysqli->query("CREATE TABLE hodgepodge (id int auto_increment primary key,
+											claim_id int,
+											hodgepodge text,
+											date_created datetime)") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
+		$mysqli->query("INSERT into appinfo (version) values('8');") or print($mysqli->error);
+		
+	case 8:
+		echo("Renaming hodgepodge table to corpus_items\n");
+		$mysqli->query("ALTER TABLE hodgepodge
+							 RENAME corpus_items") or print($mysqli->error);
+		
+		echo("Updating corpus_items table\n");
+		$mysqli->query("ALTER TABLE corpus_items
+						CHANGE COLUMN hodgepodge content text") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
+		$mysqli->query("INSERT into appinfo (version) values('9');") or print($mysqli->error);
 		
 	default:
 		echo("Finished updating the schema\n");
