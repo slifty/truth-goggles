@@ -14,6 +14,12 @@ require_once("Verdict.php");
 class ResultClass extends FactoryObject implements JSONObject {
 	
 	# Constants
+	const CLASS_TRUE = "true";
+	const CLASS_MOSTLY_TRUE = "mostly_true";
+	const CLASS_HALF_TRUE = "half_true";
+	const CLASS_BARELY_TRUE = "barely_true";
+	const CLASS_FALSE = "false";
+	const CLASS_PANTS_ON_FIRE = "pants_on_fire";
 	
 	
 	# Static Variables
@@ -31,62 +37,62 @@ class ResultClass extends FactoryObject implements JSONObject {
 	
 	# FactoryObject Methods
 	protected static function gatherData($objectString) {
-		$dataArrays = array();
+		$data_arrays = array();
 		
 		// Load an empty object
 		if($objectString === FactoryObject::INIT_EMPTY) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['title'] = "";
-			$dataArray['description'] = "";
-			$dataArray['class'] = "";
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['title'] = "";
+			$data_array['description'] = "";
+			$data_array['class'] = "";
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Load a default object
 		if($objectString === FactoryObject::INIT_DEFAULT) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['title'] = "";
-			$dataArray['description'] = "";
-			$dataArray['class'] = "";
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['title'] = "";
+			$data_array['description'] = "";
+			$data_array['class'] = "";
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Set up for lookup
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$queryString = "SELECT result_classes.id AS itemID,
-							   result_classes.title AS title,
-							   result_classes.description AS description,
-							   result_classes.class AS class
-						  FROM result_classes
-						 WHERE result_classes.id IN (".$objectString.")";
+		$query_string = "SELECT result_classes.id AS itemID,
+								result_classes.title AS title,
+								result_classes.description AS description,
+								result_classes.class AS class
+						   FROM result_classes
+						  WHERE result_classes.id IN (".$objectString.")";
 		
-		$result = $mysqli->query($queryString)
+		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
 		
 		while($resultArray = $result->fetch_assoc()) {
-			$dataArray = array();
-			$dataArray['itemID'] = $resultArray['itemID'];
-			$dataArray['title'] = $resultArray['title'];
-			$dataArray['description'] = $resultArray['description'];
-			$dataArray['class'] = $resultArray['class'];
-			$dataArrays[] = $dataArray;
+			$data_array = array();
+			$data_array['itemID'] = $resultArray['itemID'];
+			$data_array['title'] = $resultArray['title'];
+			$data_array['description'] = $resultArray['description'];
+			$data_array['class'] = $resultArray['class'];
+			$data_arrays[] = $data_array;
 		}
 		
 		$result->free();
-		return $dataArrays;
+		return $data_arrays;
 	}
 	
-	public function load($dataArray) {
-		parent::load($dataArray);
-		$this->title = isset($dataArray["title"])?$dataArray["title"]:"";
-		$this->description = isset($dataArray["description"])?$dataArray["description"]:"";
-		$this->class = isset($dataArray["class"])?$dataArray["class"]:"";
+	public function load($data_array) {
+		parent::load($data_array);
+		$this->title = isset($data_array["title"])?$data_array["title"]:"";
+		$this->description = isset($data_array["description"])?$data_array["description"]:"";
+		$this->class = isset($data_array["class"])?$data_array["class"]:"";
 	}
 	
 	
@@ -114,16 +120,16 @@ class ResultClass extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$queryString = "UPDATE result_classes
+			$query_string = "UPDATE result_classes
 							   SET result_classes.title = ".DBConn::clean($this->getTitle()).",
 								   result_classes.description = ".DBConn::clean($this->getDescription()).",
 								   result_classes.class = ".DBConn::clean($this->getClass()).",
 							 WHERE result_classes.id = ".DBConn::clean($this->getItemID());
 							
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$queryString = "INSERT INTO result_classes
+			$query_string = "INSERT INTO result_classes
 								   (result_classes.id,
 									result_classes.title,
 									result_classes.description,
@@ -133,7 +139,7 @@ class ResultClass extends FactoryObject implements JSONObject {
 									".DBConn::clean($this->getDescription()).",
 									".DBConn::clean($this->getClass()).")";
 			
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 			$this->setItemID($mysqli->insert_id);
 		}
 		
@@ -146,9 +152,9 @@ class ResultClass extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$queryString = "DELETE FROM result_classes
+		$query_string = "DELETE FROM result_classes
 							  WHERE result_classes.id = ".DBConn::clean($this->getItemID());
-		$mysqli->query($queryString);
+		$mysqli->query($query_string);
 	}
 	
 	
@@ -167,6 +173,14 @@ class ResultClass extends FactoryObject implements JSONObject {
 	
 	public function setClass($str) { $this->class = $str;}
 	
+	
+	# Static Methods
+	public static function getObjectByClass($class) {
+		$query_string = "SELECT result_classes.id as itemID 
+						   FROM result_classes
+						  WHERE result_classes.class = ".DBConn::clean($class);
+		return ResultClass::getObjects($query_string);
+	}
 }
 
 ?>

@@ -20,6 +20,7 @@ class Claim extends FactoryObject implements JSONObject {
 	
 	# Instance Variables
 	private $content; // string
+	private $dateRecorded; // timestamp
 	private $dateCreated; //timestamp
 	
 	
@@ -31,57 +32,62 @@ class Claim extends FactoryObject implements JSONObject {
 	
 	# FactoryObject Methods
 	protected static function gatherData($objectString) {
-		$dataArrays = array();
+		$data_arrays = array();
 		
 		// Load an empty object
 		if($objectString === FactoryObject::INIT_EMPTY) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['content'] = "";
-			$dataArray['dateCreated'] = 0;
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['content'] = "";
+			$data_array['dateRecorded'] = 0;
+			$data_array['dateCreated'] = 0;
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Load a default object
 		if($objectString === FactoryObject::INIT_DEFAULT) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['content'] = "";
-			$dataArray['dateCreated'] = 0;
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['content'] = "";
+			$data_array['dateRecorded'] = 0;
+			$data_array['dateCreated'] = 0;
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Set up for lookup
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$queryString = "SELECT claims.id AS itemID,
+		$query_string = "SELECT claims.id AS itemID,
 							   claims.content AS content,
+							   unix_timestamp(claims.date_recorded) as dateRecorded,
 							   unix_timestamp(claims.date_created) as dateCreated
 						  FROM claims
 						 WHERE claims.id IN (".$objectString.")";
 		
-		$result = $mysqli->query($queryString)
+		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
 		
 		while($resultArray = $result->fetch_assoc()) {
-			$dataArray = array();
-			$dataArray['itemID'] = $resultArray['itemID'];
-			$dataArray['content'] = $resultArray['content'];
-			$dataArray['dateCreated'] = $resultArray['dateCreated'];
-			$dataArrays[] = $dataArray;
+			$data_array = array();
+			$data_array['itemID'] = $resultArray['itemID'];
+			$data_array['content'] = $resultArray['content'];
+			$data_array['dateRecorded'] = $resultArray['dateRecorded'];
+			$data_array['dateCreated'] = $resultArray['dateCreated'];
+			$data_arrays[] = $data_array;
 		}
 		
 		$result->free();
-		return $dataArrays;
+		return $data_arrays;
 	}
 	
-	public function load($dataArray) {
-		parent::load($dataArray);
-		$this->content = isset($dataArray["content"])?$dataArray["content"]:"";
-		$this->dateCreated = isset($dataArray["dateCreated"])?$dataArray["dateCreated"]:0;
+	public function load($data_array) {
+		parent::load($data_array);
+		$this->content = isset($data_array["content"])?$data_array["content"]:"";
+		$this->dateRecorded = isset($data_array["dateRecorded"])?$data_array["dateRecorded"]:0;
+		$this->dateCreated = isset($data_array["dateCreated"])?$data_array["dateCreated"]:0;
 	}
 	
 	
@@ -96,7 +102,7 @@ class Claim extends FactoryObject implements JSONObject {
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
 			"content": '.DBConn::clean($this->getContent()).',
-			"date_created": '.DBConn::clean($this->getDateCreated()).',
+			"date_recorded": '.DBConn::clean($this->getDateRecorded()).',
 			"verdicts": '.$verdictsJSON.'
 		}';
 		return $json;
@@ -115,22 +121,24 @@ class Claim extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$queryString = "UPDATE claims
+			$query_string = "UPDATE claims
 							   SET claims.content = ".DBConn::clean($this->getContent())."
 							 WHERE claims.id = ".DBConn::clean($this->getItemID());
 							
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$queryString = "INSERT INTO claims
+			$query_string = "INSERT INTO claims
 								   (claims.id,
 									claims.content,
+									claims.date_recorded,
 									claims.date_created)
 							VALUES (0,
 									".DBConn::clean($this->getContent()).",
+									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
 			
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 			$this->setItemID($mysqli->insert_id);
 		}
 		
@@ -143,53 +151,57 @@ class Claim extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$queryString = "DELETE FROM claims
+		$query_string = "DELETE FROM claims
 							  WHERE claims.id = ".DBConn::clean($this->getItemID());
-		$mysqli->query($queryString);
+		$mysqli->query($query_string);
 	}
 	
 	
 	# Getters
-	public function getContent() { return $this->content;}
+	public function getContent() { return $this->content; }
 	
-	public function getDateCreated() { return $this->dateCreated;}
+	public function getDateRecorded() { return $this->dateRecorded; }
+
+	public function getDateCreated() { return $this->dateCreated; }
 	
 	public function getVerdicts() {
 		if($this->verdicts != null)
 			return $this->verdicts;
 		
-		$queryString = "SELECT verdicts.id
+		$query_string = "SELECT verdicts.id
 						  FROM verdicts
 						 WHERE verdicts.claim_id = ".DBConn::clean($this->getItemID());
 		
-		return $this->verdicts = Verdict::getObjects($queryString);
+		return $this->verdicts = Verdict::getObjects($query_string);
 	}
 	
 	public function getSnippets() {
 		if($this->snippets != null)
 			return $this->snippets;
 		
-		$queryString = "SELECT snippets.id
+		$query_string = "SELECT snippets.id
 						  FROM snippets
 						 WHERE snippets.claim_id = ".DBConn::clean($this->getItemID());
 		
-		return $this->snippets = Snippet::getObjects($queryString);
+		return $this->snippets = Snippet::getObjects($query_string);
 	}
 	
 	public function getCorpusItems() {
 		if($this->corpusItems != null)
 			return $this->corpusItems;
 		
-		$queryString = "SELECT corpus_items.id
+		$query_string = "SELECT corpus_items.id
 						  FROM corpus_items
 						 WHERE corpus_items.claim_id = ".DBConn::clean($this->getItemID());
 		
-		return $this->corpusItems = CorpusItem::getObjects($queryString);
+		return $this->corpusItems = CorpusItem::getObjects($query_string);
 	}
 	
 	
 	# Setters
-	public function setContent($str) { $this->content = $str;}
+	public function setContent($str) { $this->content = $str; }
+	
+	public function setDateRecorded($timestamp) { $this->dateRecorded = $timestamp; }
 	
 	
 	# Static Methods

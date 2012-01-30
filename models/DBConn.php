@@ -37,10 +37,6 @@ class DBConn {
 		if(is_string($data)) {
 			$data = ltrim($data);
 			$data = rtrim($data);
-			//$data = htmlentities($data);
-			//$data = nl2br($data, true);
-			// $dbConn = DBConn::connect();
-			// 			$data = $dbConn->real_escape_string($data);
 			
 			// Get rid of backslashes
 			$data = str_replace('\\','\\\\',$data);
@@ -51,7 +47,6 @@ class DBConn {
 			
 			// JSON requires new line characters be escaped
 			$data = str_replace("\n", "\\n", $data);
-			
 			$data = str_replace('"','\\"',$data);
 			
 			if($cleanType == DBConn::CLEAN_VALIDATION)

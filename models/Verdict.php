@@ -36,39 +36,39 @@ class Verdict extends FactoryObject implements JSONObject {
 	
 	# FactoryObject Methods
 	protected static function gatherData($objectString) {
-		$dataArrays = array();
+		$data_arrays = array();
 		
 		// Load an empty object
 		if($objectString === FactoryObject::INIT_EMPTY) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['claimID'] = 0;
-			$dataArray['resultClassID'] = 0;
-			$dataArray['vettingServiceID'] = 0;
-			$dataArray['url'] = "";
-			$dataArray['dateCreated'] = 0;
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['claimID'] = 0;
+			$data_array['resultClassID'] = 0;
+			$data_array['vettingServiceID'] = 0;
+			$data_array['url'] = "";
+			$data_array['dateCreated'] = 0;
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Load a default object
 		if($objectString === FactoryObject::INIT_DEFAULT) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['claimID'] = 0;
-			$dataArray['resultClassID'] = 0;
-			$dataArray['vettingServiceID'] = 0;
-			$dataArray['url'] = "";
-			$dataArray['dateCreated'] = 0;
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['claimID'] = 0;
+			$data_array['resultClassID'] = 0;
+			$data_array['vettingServiceID'] = 0;
+			$data_array['url'] = "";
+			$data_array['dateCreated'] = 0;
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Set up for lookup
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$queryString = "SELECT verdicts.id AS itemID,
+		$query_string = "SELECT verdicts.id AS itemID,
 							   verdicts.claim_id AS claimID,
    							   verdicts.result_class_id AS resultClassID,
    							   verdicts.vetting_service_id AS vettingServiceID,
@@ -77,31 +77,31 @@ class Verdict extends FactoryObject implements JSONObject {
 						  FROM verdicts
 						 WHERE verdicts.id IN (".$objectString.")";
 		
-		$result = $mysqli->query($queryString)
+		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
 		
 		while($resultArray = $result->fetch_assoc()) {
-			$dataArray = array();
-			$dataArray['itemID'] = $resultArray['itemID'];
-			$dataArray['claimID'] = $resultArray['claimID'];
-			$dataArray['resultClassID'] = $resultArray['resultClassID'];
-			$dataArray['vettingServiceID'] = $resultArray['vettingServiceID'];
-			$dataArray['url'] = $resultArray['url'];
-			$dataArray['dateCreated'] = $resultArray['dateCreated'];
-			$dataArrays[] = $dataArray;
+			$data_array = array();
+			$data_array['itemID'] = $resultArray['itemID'];
+			$data_array['claimID'] = $resultArray['claimID'];
+			$data_array['resultClassID'] = $resultArray['resultClassID'];
+			$data_array['vettingServiceID'] = $resultArray['vettingServiceID'];
+			$data_array['url'] = $resultArray['url'];
+			$data_array['dateCreated'] = $resultArray['dateCreated'];
+			$data_arrays[] = $data_array;
 		}
 		
 		$result->free();
-		return $dataArrays;
+		return $data_arrays;
 	}
 	
-	public function load($dataArray) {
-		parent::load($dataArray);
-		$this->claimID = isset($dataArray["claimID"])?$dataArray["claimID"]:0;
-		$this->resultClassID = isset($dataArray["resultClassID"])?$dataArray["resultClassID"]:0;
-		$this->vettingServiceID = isset($dataArray["vettingServiceID"])?$dataArray["vettingServiceID"]:0;
-		$this->url = isset($dataArray["url"])?$dataArray["url"]:"";
-		$this->dateCreated = isset($dataArray["dateCreated"])?$dataArray["dateCreated"]:0;
+	public function load($data_array) {
+		parent::load($data_array);
+		$this->claimID = isset($data_array["claimID"])?$data_array["claimID"]:0;
+		$this->resultClassID = isset($data_array["resultClassID"])?$data_array["resultClassID"]:0;
+		$this->vettingServiceID = isset($data_array["vettingServiceID"])?$data_array["vettingServiceID"]:0;
+		$this->url = isset($data_array["url"])?$data_array["url"]:"";
+		$this->dateCreated = isset($data_array["dateCreated"])?$data_array["dateCreated"]:0;
 	}
 	
 	
@@ -130,17 +130,17 @@ class Verdict extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$queryString = "UPDATE verdicts
+			$query_string = "UPDATE verdicts
 							   SET verdicts.claim_id = ".DBConn::clean($this->getClaimID()).",
 								   verdicts.result_class_id = ".DBConn::clean($this->getResultClassID()).",
 								   verdicts.vetting_service_id = ".DBConn::clean($this->getVettingServiceID()).",
 								   verdicts.url = ".DBConn::clean($this->getURL())."
 							 WHERE verdicts.id = ".DBConn::clean($this->getItemID());
 							
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$queryString = "INSERT INTO verdicts
+			$query_string = "INSERT INTO verdicts
 								   (verdicts.id,
 									verdicts.claim_id,
 									verdicts.result_class_id,
@@ -154,7 +154,7 @@ class Verdict extends FactoryObject implements JSONObject {
 									".DBConn::clean($this->getURL()).",
 									NOW())";
 			
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 			$this->setItemID($mysqli->insert_id);
 		}
 		
@@ -167,9 +167,9 @@ class Verdict extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$queryString = "DELETE FROM verdicts
+		$query_string = "DELETE FROM verdicts
 							  WHERE verdicts.id = ".DBConn::clean($this->getItemID());
-		$mysqli->query($queryString);
+		$mysqli->query($query_string);
 	}
 	
 	

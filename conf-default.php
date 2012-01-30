@@ -13,4 +13,8 @@
 	global $SITE_ROOT, $SITE_DOMAIN;
 	$SITE_ROOT = "";
 	$SITE_DOMAIN = "127.0.0.1";
+	
+	// API Settings
+	global $API_RELATED_CLAIMS;
+	$API_RELATED_CLAIMS = "";
 ?>

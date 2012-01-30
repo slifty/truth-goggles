@@ -58,8 +58,7 @@ switch($version) {
 											date_created datetime)") or print($mysqli->error);
 		
 		echo("Updating app version\n");
-		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
-		$mysqli->query("INSERT into appinfo (version) values('2');") or print($mysqli->error);
+		$mysqli->query("UPDATE appinfo set version ='2';") or print($mysqli->error);
 		
 	case 2:
 		echo("Updating claims table\n");
@@ -67,8 +66,7 @@ switch($version) {
 						  ADD COLUMN url varchar(255) AFTER claim_source_id") or print($mysqli->error);
 		
 		echo("Updating app version\n");
-		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
-		$mysqli->query("INSERT into appinfo (version) values('3');") or print($mysqli->error);
+		$mysqli->query("UPDATE appinfo set version ='3';") or print($mysqli->error);
 		
 	case 3:
 		echo("Updating result_classes table\n");
@@ -78,8 +76,7 @@ switch($version) {
 						  ADD COLUMN class varchar(32) AFTER description") or print($mysqli->error);
 		
 		echo("Updating app version\n");
-		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
-		$mysqli->query("INSERT into appinfo (version) values('4');") or print($mysqli->error);
+		$mysqli->query("UPDATE appinfo set version ='4';") or print($mysqli->error);
 		
 	case 4:
 		echo("Updating verdicts table\n");
@@ -87,8 +84,7 @@ switch($version) {
 					  CHANGE COLUMN result_id result_class_id int") or print($mysqli->error);
 		
 		echo("Updating app version\n");
-		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
-		$mysqli->query("INSERT into appinfo (version) values('5');") or print($mysqli->error);
+		$mysqli->query("UPDATE appinfo set version ='5';") or print($mysqli->error);
 		
 	case 5:
 		echo("Updating snippets table\n");
@@ -97,11 +93,10 @@ switch($version) {
 					      ADD COLUMN context_code text AFTER context") or print($mysqli->error);
 		
 		echo("Updating app version\n");
-		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
-		$mysqli->query("INSERT into appinfo (version) values('6');") or print($mysqli->error);
+		$mysqli->query("UPDATE appinfo set version ='6';") or print($mysqli->error);
 		
 	case 6:
-		echo("Renaming claim_sources table to verdict_sources \n");
+		echo("Renaming claim_sources table to vetting_services \n");
 		$mysqli->query("ALTER TABLE claim_sources
 			 				 RENAME vetting_services") or print($mysqli->error);
 		
@@ -123,8 +118,7 @@ switch($version) {
 											verdict_source_id int)") or print($mysqli->error);
 		
 		echo("Updating app version\n");
-		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
-		$mysqli->query("INSERT into appinfo (version) values('7');") or print($mysqli->error);
+		$mysqli->query("UPDATE appinfo set version ='7';") or print($mysqli->error);
 		
 	case 7:
 		echo("Creating hodgepodge table\n");
@@ -134,8 +128,7 @@ switch($version) {
 											date_created datetime)") or print($mysqli->error);
 		
 		echo("Updating app version\n");
-		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
-		$mysqli->query("INSERT into appinfo (version) values('8');") or print($mysqli->error);
+		$mysqli->query("UPDATE appinfo set version ='8';") or print($mysqli->error);
 		
 	case 8:
 		echo("Renaming hodgepodge table to corpus_items\n");
@@ -147,9 +140,24 @@ switch($version) {
 						CHANGE COLUMN hodgepodge content text") or print($mysqli->error);
 		
 		echo("Updating app version\n");
-		$mysqli->query("DELETE from appinfo") or print($mysqli->error);
-		$mysqli->query("INSERT into appinfo (version) values('9');") or print($mysqli->error);
+		$mysqli->query("UPDATE appinfo set version ='9';") or print($mysqli->error);
 		
+	case 9:
+		echo("Updating vetting_services table\n");
+		$mysqli->query("ALTER TABLE vetting_services
+					      ADD COLUMN logo_url text AFTER url") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("UPDATE appinfo set version ='10';") or print($mysqli->error);
+		
+	case 10:
+		echo("Updating claims table\n");
+		$mysqli->query("ALTER TABLE claims
+					      ADD COLUMN date_recorded datetime AFTER content") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("UPDATE appinfo set version ='11';") or print($mysqli->error);
+	
 	default:
 		echo("Finished updating the schema\n");
 }

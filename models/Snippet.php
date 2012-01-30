@@ -31,37 +31,37 @@ class Snippet extends FactoryObject implements JSONObject {
 	
 	# FactoryObject Methods
 	protected static function gatherData($objectString) {
-		$dataArrays = array();
+		$data_arrays = array();
 		
 		// Load an empty object
 		if($objectString === FactoryObject::INIT_EMPTY) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['claimID'] = 0;
-			$dataArray['url'] = "";
-			$dataArray['content'] = "";
-			$dataArray['context'] = "";
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['claimID'] = 0;
+			$data_array['url'] = "";
+			$data_array['content'] = "";
+			$data_array['context'] = "";
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Load a default object
 		if($objectString === FactoryObject::INIT_DEFAULT) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['claimID'] = 0;
-			$dataArray['url'] = "";
-			$dataArray['content'] = "";
-			$dataArray['context'] = "";
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['claimID'] = 0;
+			$data_array['url'] = "";
+			$data_array['content'] = "";
+			$data_array['context'] = "";
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Set up for lookup
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$queryString = "SELECT snippets.id AS itemID,
+		$query_string = "SELECT snippets.id AS itemID,
 							   snippets.claim_id AS claimID,
 							   snippets.url AS url,
 							   snippets.content AS content,
@@ -69,29 +69,29 @@ class Snippet extends FactoryObject implements JSONObject {
 						  FROM snippets
 						 WHERE snippets.id IN (".$objectString.")";
 		
-		$result = $mysqli->query($queryString)
+		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
 		
 		while($resultArray = $result->fetch_assoc()) {
-			$dataArray = array();
-			$dataArray['itemID'] = $resultArray['itemID'];
-			$dataArray['claimID'] = $resultArray['claimID'];
-			$dataArray['url'] = $resultArray['url'];
-			$dataArray['content'] = $resultArray['content'];
-			$dataArray['context'] = $resultArray['context'];
-			$dataArrays[] = $dataArray;
+			$data_array = array();
+			$data_array['itemID'] = $resultArray['itemID'];
+			$data_array['claimID'] = $resultArray['claimID'];
+			$data_array['url'] = $resultArray['url'];
+			$data_array['content'] = $resultArray['content'];
+			$data_array['context'] = $resultArray['context'];
+			$data_arrays[] = $data_array;
 		}
 		
 		$result->free();
-		return $dataArrays;
+		return $data_arrays;
 	}
 	
-	public function load($dataArray) {
-		parent::load($dataArray);
-		$this->claimID = isset($dataArray["claimID"])?$dataArray["claimID"]:0;
-		$this->url = isset($dataArray["url"])?$dataArray["url"]:"";
-		$this->content = isset($dataArray["content"])?$dataArray["content"]:"";
-		$this->context = isset($dataArray["context"])?$dataArray["context"]:"";
+	public function load($data_array) {
+		parent::load($data_array);
+		$this->claimID = isset($data_array["claimID"])?$data_array["claimID"]:0;
+		$this->url = isset($data_array["url"])?$data_array["url"]:"";
+		$this->content = isset($data_array["content"])?$data_array["content"]:"";
+		$this->context = isset($data_array["context"])?$data_array["context"]:"";
 	}
 	
 	
@@ -124,7 +124,7 @@ class Snippet extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$queryString = "UPDATE snippets
+			$query_string = "UPDATE snippets
 							   SET snippets.claim_id = ".DBConn::clean($this->getClaimID()).",
 							   AND snippets.url = ".DBConn::clean($this->getURL()).",
 							   AND snippets.content = ".DBConn::clean($this->getContent()).",
@@ -133,10 +133,10 @@ class Snippet extends FactoryObject implements JSONObject {
 							   AND snippets.context_code = ".DBConn::clean($this->getContextCode())."
 							 WHERE snippets.id = ".DBConn::clean($this->getItemID());
 							
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$queryString = "INSERT INTO snippets
+			$query_string = "INSERT INTO snippets
 								   (snippets.id,
 									snippets.claim_id,
 									snippets.url,
@@ -152,7 +152,7 @@ class Snippet extends FactoryObject implements JSONObject {
 									".DBConn::clean($this->getContext()).",
 									".DBConn::clean($this->getContextCode()).")";
 			
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 			$this->setItemID($mysqli->insert_id);
 		}
 		
@@ -165,9 +165,9 @@ class Snippet extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$queryString = "DELETE FROM snippets
+		$query_string = "DELETE FROM snippets
 							  WHERE snippets.id = ".DBConn::clean($this->getItemID());
-		$mysqli->query($queryString);
+		$mysqli->query($query_string);
 	}
 	
 	
@@ -203,11 +203,11 @@ class Snippet extends FactoryObject implements JSONObject {
 	
 	# Static Methods
 	public static function getSnippetsByContext($context) {
-		$queryString = "SELECT distinct snippets.id
+		$query_string = "SELECT distinct snippets.id
 						  FROM snippets
 						 WHERE snippets.context_code = ".DBConn::clean(Snippet::codify($context))."
 							OR ".DBConn::clean(Snippet::codify($context))." LIKE concat('%',snippets.content_code,'%')";
-		return Snippet::getObjects($queryString);
+		return Snippet::getObjects($query_string);
 	}
 	
 	public static function getSnippetsByContent($content) {

@@ -30,62 +30,62 @@ class CorpusItem extends FactoryObject implements JSONObject {
 	
 	# FactoryObject Methods
 	protected static function gatherData($objectString) {
-		$dataArrays = array();
+		$data_arrays = array();
 		
 		// Load an empty object
 		if($objectString === FactoryObject::INIT_EMPTY) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['claimID'] = 0;
-			$dataArray['content'] = "";
-			$dataArray['dateCreated'] = 0;
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['claimID'] = 0;
+			$data_array['content'] = "";
+			$data_array['dateCreated'] = 0;
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Load a default object
 		if($objectString === FactoryObject::INIT_DEFAULT) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['claimID'] = 0;
-			$dataArray['content'] = "";
-			$dataArray['dateCreated'] = 0;
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['claimID'] = 0;
+			$data_array['content'] = "";
+			$data_array['dateCreated'] = 0;
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Set up for lookup
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$queryString = "SELECT corpus_items.id AS itemID,
+		$query_string = "SELECT corpus_items.id AS itemID,
 							   corpus_items.claim_id AS claimID,
 							   corpus_items.content AS content,
 							   unix_timestamp(corpus_items.date_created) as dateCreated
 						  FROM corpus_items
 						 WHERE corpus_items.id IN (".$objectString.")";
 		
-		$result = $mysqli->query($queryString)
+		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
 		
 		while($resultArray = $result->fetch_assoc()) {
-			$dataArray = array();
-			$dataArray['itemID'] = $resultArray['itemID'];
-			$dataArray['claimID'] = $resultArray['claimID'];
-			$dataArray['content'] = $resultArray['content'];
-			$dataArray['dateCreated'] = $resultArray['dateCreated'];
-			$dataArrays[] = $dataArray;
+			$data_array = array();
+			$data_array['itemID'] = $resultArray['itemID'];
+			$data_array['claimID'] = $resultArray['claimID'];
+			$data_array['content'] = $resultArray['content'];
+			$data_array['dateCreated'] = $resultArray['dateCreated'];
+			$data_arrays[] = $data_array;
 		}
 		
 		$result->free();
-		return $dataArrays;
+		return $data_arrays;
 	}
 	
-	public function load($dataArray) {
-		parent::load($dataArray);
-		$this->claimID = isset($dataArray["claimID"])?$dataArray["claimID"]:0;
-		$this->content = isset($dataArray["content"])?$dataArray["content"]:"";
-		$this->dateCreated = isset($dataArray["dateCreated"])?$dataArray["dateCreated"]:0;
+	public function load($data_array) {
+		parent::load($data_array);
+		$this->claimID = isset($data_array["claimID"])?$data_array["claimID"]:0;
+		$this->content = isset($data_array["content"])?$data_array["content"]:"";
+		$this->dateCreated = isset($data_array["dateCreated"])?$data_array["dateCreated"]:0;
 	}
 	
 	
@@ -113,15 +113,15 @@ class CorpusItem extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$queryString = "UPDATE corpus_items
+			$query_string = "UPDATE corpus_items
 							   SET corpus_items.claim_id = ".DBConn::clean($this->getClaimID()).",
 							   AND corpus_items.content = ".DBConn::clean($this->getContent()).",
 							 WHERE corpus_items.id = ".DBConn::clean($this->getItemID());
 							
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$queryString = "INSERT INTO corpus_items
+			$query_string = "INSERT INTO corpus_items
 								   (corpus_items.id,
 									corpus_items.claim_id,
 									corpus_items.content,
@@ -131,7 +131,7 @@ class CorpusItem extends FactoryObject implements JSONObject {
 									".DBConn::clean($this->getContent()).",
 									NOW())";
 			
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 			$this->setItemID($mysqli->insert_id);
 		}
 		
@@ -144,9 +144,9 @@ class CorpusItem extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$queryString = "DELETE FROM corpus_items
+		$query_string = "DELETE FROM corpus_items
 							  WHERE corpus_items.id = ".DBConn::clean($this->getItemID());
-		$mysqli->query($queryString);
+		$mysqli->query($query_string);
 	}
 	
 	

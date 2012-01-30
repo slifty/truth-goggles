@@ -10,7 +10,15 @@
 		$collectionJSON = '{"claims": ['.$object->toJSON()."]}";
 	} else {
 		// Return a list of objects
-		if (false && isset($_GET['claim_id'])) {
+		if (isset($_GET['context'])) {
+			// Get a list of related claims from the API
+			$ch = curl_init($API_RELATED_CLAIMS.'?c='.urlencode($_GET['context']));
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+			
+			$collectionJSON = curl_exec($ch);
+			curl_close($ch);
+			
 		} else {
 			$claims = Claim::getObjects('select claims.id from claims');
 			

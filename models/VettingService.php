@@ -20,6 +20,7 @@ class VettingService extends FactoryObject implements JSONObject {
 	# Instance Variables
 	private $title; // str
 	private $url; // str
+	private $logo_url; // str
 	
 	
 	# Caches
@@ -27,57 +28,62 @@ class VettingService extends FactoryObject implements JSONObject {
 	
 	# FactoryObject Methods
 	protected static function gatherData($objectString) {
-		$dataArrays = array();
+		$data_arrays = array();
 		
 		// Load an empty object
 		if($objectString === FactoryObject::INIT_EMPTY) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['title'] = "";
-			$dataArray['url'] = "";
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['title'] = "";
+			$data_array['url'] = "";
+			$data_array['logo_url'] = "";
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Load a default object
 		if($objectString === FactoryObject::INIT_DEFAULT) {
-			$dataArray = array();
-			$dataArray['itemID'] = 0;
-			$dataArray['title'] = "";
-			$dataArray['url'] = "";
-			$dataArrays[] = $dataArray;
-			return $dataArrays;
+			$data_array = array();
+			$data_array['itemID'] = 0;
+			$data_array['title'] = "";
+			$data_array['url'] = "";
+			$data_array['logo_url'] = "";
+			$data_arrays[] = $data_array;
+			return $data_arrays;
 		}
 		
 		// Set up for lookup
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$queryString = "SELECT vetting_services.id AS itemID,
+		$query_string = "SELECT vetting_services.id AS itemID,
 							   vetting_services.title AS title,
-							   vetting_services.url AS url
+							   vetting_services.url AS url,
+							   vetting_services.logo_url AS logo_url
 						  FROM vetting_services
 						 WHERE vetting_services.id IN (".$objectString.")";
 		
-		$result = $mysqli->query($queryString)
+		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
 		
 		while($resultArray = $result->fetch_assoc()) {
-			$dataArray = array();
-			$dataArray['itemID'] = $resultArray['itemID'];
-			$dataArray['title'] = $resultArray['title'];
-			$dataArray['url'] = $resultArray['url'];
-			$dataArrays[] = $dataArray;
+			$data_array = array();
+			$data_array['itemID'] = $resultArray['itemID'];
+			$data_array['title'] = $resultArray['title'];
+			$data_array['url'] = $resultArray['url'];
+			$data_array['logo_url'] = $resultArray['logo_url'];
+			$data_arrays[] = $data_array;
 		}
 		
 		$result->free();
-		return $dataArrays;
+		return $data_arrays;
 	}
 	
-	public function load($dataArray) {
-		parent::load($dataArray);
-		$this->title = isset($dataArray["title"])?$dataArray["title"]:"";
-		$this->url = isset($dataArray["url"])?$dataArray["url"]:"";
+	public function load($data_array) {
+		parent::load($data_array);
+		$this->title = isset($data_array["title"])?$data_array["title"]:"";
+		$this->url = isset($data_array["url"])?$data_array["url"]:"";
+		$this->logo_url = isset($data_array["logo_url"])?$data_array["logo_url"]:"";
 	}
 	
 	
@@ -86,7 +92,8 @@ class VettingService extends FactoryObject implements JSONObject {
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
 			"title": '.DBConn::clean($this->getTitle()).',
-			"url": '.DBConn::clean($this->getURL()).'
+			"url": '.DBConn::clean($this->getURL()).',
+			"logo_url": '.DBConn::clean($this->getLogoURL()).'
 		}';
 		return $json;
 	}
@@ -104,23 +111,26 @@ class VettingService extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$queryString = "UPDATE vetting_services
+			$query_string = "UPDATE vetting_services
 							   SET vetting_services.title = ".DBConn::clean($this->getTitle()).",
-								   vetting_services.url = ".DBConn::clean($this->getURL())."
+								   vetting_services.url = ".DBConn::clean($this->getURL()).",
+								   vetting_services.logo_url = ".DBConn::clean($this->getLogoURL())."
 							 WHERE vetting_services.id = ".DBConn::clean($this->getItemID());
 							
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$queryString = "INSERT INTO vetting_services
+			$query_string = "INSERT INTO vetting_services
 								   (vetting_services.id,
 									vetting_services.title,
-									vetting_services.url)
+									vetting_services.url,
+									vetting_services.logo_url)
 							VALUES (0,
 									".DBConn::clean($this->getTitle()).",
-									".DBConn::clean($this->getURL()).")";
+									".DBConn::clean($this->getURL()).",
+									".DBConn::clean($this->getLogoURL()).")";
 			
-			$mysqli->query($queryString) or print($mysqli->error);
+			$mysqli->query($query_string) or print($mysqli->error);
 			$this->setItemID($mysqli->insert_id);
 		}
 		
@@ -133,22 +143,35 @@ class VettingService extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$queryString = "DELETE FROM vetting_services
+		$query_string = "DELETE FROM vetting_services
 							  WHERE vetting_services.id = ".DBConn::clean($this->getItemID());
-		$mysqli->query($queryString);
+		$mysqli->query($query_string);
 	}
 	
 	
 	# Getters
-	public function getTitle() { return $this->title;}
+	public function getTitle() { return $this->title; }
 	
-	public function getURL() { return $this->url;}
+	public function getURL() { return $this->url; }
+	
+	public function getLogoURL() { return $this->logo_url; }
 	
 	
 	# Setters
-	public function setTitle($str) { $this->title = $str;}
+	public function setTitle($str) { $this->title = $str; }
 	
-	public function setURL($str) { $this->url = $str;}
+	public function setURL($str) { $this->url = $str; }
+	
+	public function setLogoURL($str) { $this->logo_url = $str; }
+	
+	
+	# Static Loaders
+	public static function getObjectByTitle($str) {
+		$query_string = "SELECT vetting_services.id
+						  FROM vetting_services
+						 WHERE vetting_services.title = ".DBConn::clean($str);
+		return VettingService::getObjects($query_string);
+	}
 	
 }
 

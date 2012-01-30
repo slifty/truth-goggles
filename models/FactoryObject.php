@@ -5,6 +5,7 @@
 #  Daniel Schultz
 #
 ###
+require_once("DBConn.php");
 
 abstract class FactoryObject {
 	
@@ -20,17 +21,17 @@ abstract class FactoryObject {
 	
 	# Object Methods
 	public function __construct($itemID = FactoryObject::INIT_EMPTY) {
-		$dataArrays = static::gatherData((int)$itemID);
-		$this->load($dataArrays[0]);
+		$data_arrays = static::gatherData((int)$itemID);
+		$this->load($data_arrays[0]);
 	}
 	
 	
 	# FactoryObject Methods
 	abstract protected static function gatherData($objectString);
 	
-	protected function load($dataArray) {
+	protected function load($data_array) {
 		// Set the item ID
-		$this->setItemID(isset($dataArray["itemID"])?$dataArray["itemID"]:0);
+		$this->setItemID(isset($data_array["itemID"])?$data_array["itemID"]:0);
 	}
 	
 	
@@ -43,8 +44,8 @@ abstract class FactoryObject {
 	}
 	
 	public function refresh() {
-		$dataArrays = static::gatherData($this->getItemID());
-		$this->load($dataArrays[0]);
+		$data_arrays = static::gatherData($this->getItemID());
+		$this->load($data_arrays[0]);
 		return $this;
 	}
 	
@@ -62,36 +63,38 @@ abstract class FactoryObject {
 	# Static Methods
 	public static function getObject($objectSelector) {
 		// Takes in a single object ID and returns the associated object
-		$dataArrays = static::gatherData((int)$objectSelector);
+		$data_arrays = static::gatherData((int)$objectSelector);
 		
-		if(sizeof($dataArrays) == 0)
+		if(sizeof($data_arrays) == 0)
 			return new static();
 		
 		$newObject = new static();
-		$newObject->load($dataArrays[0]);
+		$newObject->load($data_arrays[0]);
 		return $newObject;
 	}
 	
 	public static function getObjects($objectSelectors) {
 		// Takes in either an array of object IDs or a clean query
 		
-		// If it's an array clean it
-		if(is_array($objectSelectors))
+		// If it's an array clean it and convert it to a string
+		if(is_array($objectSelectors)) {
 			foreach($objectSelectors as $key=>$objectID)
-				$objectSelectors[$key] = (int)$objectID;
+				$objectSelectors[$key] = DBConn::clean((int)$objectID);
+			$objectSelectors = implode(",",$objectSelectors);
+		}
 		elseif(!is_string($objectSelectors))
 			return array();
 		
 		// Load the data
-		$dataArrays = static::gatherData($objectSelectors);
-		if(sizeof($dataArrays) == 0)
+		$data_arrays = static::gatherData($objectSelectors);
+		if(sizeof($data_arrays) == 0)
 			return array();
 		
 		// Create the objects
 		$objectArray = array();
-		foreach($dataArrays as $dataArray) {
+		foreach($data_arrays as $data_array) {
 			$newObject = new static();
-			$newObject->load($dataArray);
+			$newObject->load($data_array);
 			$objectArray[] = $newObject;
 		}
 		return $objectArray;
