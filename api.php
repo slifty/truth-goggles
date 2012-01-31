@@ -1,7 +1,12 @@
 <?PHP
 	set_include_path($_SERVER['DOCUMENT_ROOT']);
+	
 	require_once("conf.php");
 	header('Content-type: text/javascript');
+	header('Access-Control-Allow-Origin: *');
+	header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+	header('Access-Control-Max-Age: 1000');
+	header('Access-Control-Allow-Headers: Content-Type');
 	
 	$params = explode('/',(isset($_GET['q'])?$_GET['q']:""));
 	$resourceType = preg_replace('[^A-Za-z0-9_]',"",isset($params[0])?$params[0]:"");
@@ -10,10 +15,11 @@
 	$resourceIdentifier = isset($params[1])?$params[1]:"";
 	
 	$jsonp = isset($_GET['jsonp'])?true:false;
-    $callback = isset($_GET['callback'])?$_GET['callback']:"goggles_".$requestMethod."_".$resourceType."_callback";
-    $resourceIdentifier = isset($_GET['r'])?$_GET['r']:null|$resourceIdentifier|null;
+	$callback = isset($_GET['callback'])?$_GET['callback']:"goggles_".$requestMethod."_".$resourceType."_callback";
+	$resourceIdentifier = isset($_GET['r'])?$_GET['r']:null|$resourceIdentifier|null;
 	
 	$path = "api/".$resourceType."/".$requestMethod."_".$resourceType.".php";
+	
 	if(file_exists($path))
 		include_once($path);
 	else {

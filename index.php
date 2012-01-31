@@ -19,7 +19,7 @@
 				<p>As with most tools, the largest challenges are not technical but are social.  With that in mind, what you see on this page is just a tech demo for an idea that will have a full demo in the coming month.  The goggles work in many places, but they aren't that smart yet.  Facts are not scraped, and associations with content aren't being systematically generated just yet.</p><br />
 				<p>Follow me at <a href="http://www.twitter.com/slifty">@slifty</a> to get updates about the project.</p>
 				<h2>The Demo</h2>
-				<p><a href="javascript:var%20criticalDomain='http://<?PHP echo($SITE_DOMAIN.$SITE_ROOT); ?>';var%20s=document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src=criticalDomain+'/critical.min.js';void(0);">Apply Truth Goggles</a> <-- Bookmark this link! (Drag it to your bookmarks)</p>
+				<p><a href="javascript:var%20goggles_domain='http://<?PHP echo($SITE_DOMAIN.$SITE_ROOT); ?>';var%20s=document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src=goggles_domain+'/goggles_bookmarklet.min.js';void(0);">Apply Truth Goggles</a> <-- Bookmark this link! (Drag it to your bookmarks)</p>
 				<br />
 				<p><b>While</b> advising his Fox News viewers to talk about inflation at their Thanksgiving dinners, Glenn Beck falsely claimed that the government removed food and energy prices from <b>its measure <i>of</i> inflation to hide rising prices, that a survey showed economists are “worried”</b> about inflation, and that Social Security recipients are not receiving a cost-of-living adjustment because the government “changed the calculation.”</p>
 				<br />
