@@ -202,21 +202,24 @@ class Snippet extends FactoryObject implements JSONObject {
 	
 	
 	# Static Methods
-	public static function getSnippetsByContext($context) {
+	public static function getObjectsByContext($context) {
 		$query_string = "SELECT distinct snippets.id
 						  FROM snippets
 						 WHERE snippets.context_code = ".DBConn::clean(Snippet::codify($context))."
 							OR ".DBConn::clean(Snippet::codify($context))." LIKE concat('%',snippets.content_code,'%')";
+		
 		return Snippet::getObjects($query_string);
 	}
 	
-	public static function getSnippetsByContent($content) {
+	public static function getObjectsByContent($content) {
 		return array();
 	}
 	
 	public static function codify($str) {
-		// Remove everything but letters and numbers:
-		return preg_replace("/[^A-Za-z0-9]/","",$str);
+		// Remove everything but letters and numbers, and lower case
+		$str = preg_replace("/[^A-Za-z0-9]/","",$str);
+		$str = strtolower($str);
+		return $str;
 	}
 	
 }

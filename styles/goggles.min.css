@@ -1,5 +1,7 @@
 .critical {color: #000000;}
+.critical.pants_on_fire {background: #FF9999;}
+.critical.false {background: #99FFFF;}
+.critical.barely_true {background: #FFFF99;}
+.critical.half_true {background: #FF99FF;}
+.critical.mostly_true {background: #99BB99;}
 .critical.true {background: #99FF99;}
-.critical.mostlyTrue {background: #99FFFF;}
-.critical.mostlyFalse {background: #FFFF99;}
-.critical.false {background: #FF9999;}

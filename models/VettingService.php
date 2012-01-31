@@ -170,7 +170,7 @@ class VettingService extends FactoryObject implements JSONObject {
 		$query_string = "SELECT vetting_services.id
 						  FROM vetting_services
 						 WHERE vetting_services.title = ".DBConn::clean($str);
-		return VettingService::getObjects($query_string);
+		return array_pop(VettingService::getObjects($query_string));
 	}
 	
 }

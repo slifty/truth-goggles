@@ -19,7 +19,7 @@
 			$oid = isset($_POST['oid'])?$_POST['oid']:0;
 			
 			// Scan the snippet DB for known matches
-			$snippets = Snippet::getSnippetsByContext($context);
+			$snippets = Snippet::getObjectsByContext($context);
 			
 			// Run through the snippets and generate JS Objects
 			$snippetJSON = array();

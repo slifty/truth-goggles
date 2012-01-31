@@ -179,7 +179,7 @@ class ResultClass extends FactoryObject implements JSONObject {
 		$query_string = "SELECT result_classes.id as itemID 
 						   FROM result_classes
 						  WHERE result_classes.class = ".DBConn::clean($class);
-		return ResultClass::getObjects($query_string);
+		return array_pop(ResultClass::getObjects($query_string));
 	}
 }
 
