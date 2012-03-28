@@ -2,21 +2,10 @@
 
 
 /* HTML Elements */
-body { font-family: arial;
-	background-image: -webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0, rgb(190,192,194)),
-    color-stop(0.66, rgb(237,237,237))
+body {
+	font-family: arial;
+	color: #000;
 );
-background-image: -moz-linear-gradient(
-    center bottom,
-    rgb(190,192,194) 0%,
-    rgb(237,237,237) 66%
-);
-
-	 color: #000000 }
 
 label {cursor: pointer;}
 

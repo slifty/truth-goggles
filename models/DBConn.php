@@ -29,6 +29,7 @@ class DBConn {
 		
 		// Create a connection
 		DBConn::$dbConnection = new mysqli($MYSQL_HOST,$MYSQL_USER,$MYSQL_PASS,$MYSQL_DB);
+		DBConn::$dbConnection->query("SET CHARACTER SET 'utf8'") or print($mysqli->error); 
 		
 		return DBConn::$dbConnection;
 	}
@@ -45,8 +46,9 @@ class DBConn {
 			$data = str_replace("\r\n", "\n", $data);
 			$data = str_replace("\r", "\n", $data);
 			
-			// JSON requires new line characters be escaped
+			// JSON requires some characters be escaped
 			$data = str_replace("\n", "\\n", $data);
+			$data = str_replace("\t", "\\t", $data);
 			$data = str_replace('"','\\"',$data);
 			
 			if($cleanType == DBConn::CLEAN_VALIDATION)

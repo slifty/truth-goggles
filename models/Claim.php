@@ -5,10 +5,14 @@
 #  Daniel Schultz
 #
 ###
+
+require_once("conf.php");
 require_once("DBConn.php");
 require_once("FactoryObject.php");
 require_once("JSONObject.php");
 require_once("Verdict.php");
+require_once("Token.php");
+require_once("Snippet.php");
 
 class Claim extends FactoryObject implements JSONObject {
 	
@@ -31,7 +35,7 @@ class Claim extends FactoryObject implements JSONObject {
 	
 	
 	# FactoryObject Methods
-	protected static function gatherData($objectString) {
+	protected static function gatherData($objectString, $start=FactoryObject::LIMIT_BEGINNING, $length=FactoryObject::LIMIT_ALL) {
 		$data_arrays = array();
 		
 		// Load an empty object
@@ -66,6 +70,10 @@ class Claim extends FactoryObject implements JSONObject {
 							   unix_timestamp(claims.date_created) as dateCreated
 						  FROM claims
 						 WHERE claims.id IN (".$objectString.")";
+		if($length != FactoryObject::LIMIT_ALL) {
+			$query_string .= "
+						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
+		}
 		
 		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
@@ -92,7 +100,7 @@ class Claim extends FactoryObject implements JSONObject {
 	
 	
 	# JSONObject Methods
-	public function toJSON() {
+	public function toJSON($contentStart=null, $contentLength=null) {
 		$verdicts = $this->getVerdicts();
 		$verdictsJSONArray = array();
 		foreach($verdicts as $verdict)
@@ -104,6 +112,8 @@ class Claim extends FactoryObject implements JSONObject {
 			"content": '.DBConn::clean($this->getContent()).',
 			"date_recorded": '.DBConn::clean($this->getDateRecorded()).',
 			"verdicts": '.$verdictsJSON.'
+			'.(($contentStart)?', "content_start": '.DBConn::clean($contentStart):'').'
+			'.(($contentLength)?', "content_length": '.DBConn::clean($contentLength):'').'
 		}';
 		return $json;
 	}
@@ -205,10 +215,11 @@ class Claim extends FactoryObject implements JSONObject {
 	
 	
 	# Static Methods
-	public static function getRelatedClaims($text) {
-		// This is where the magic happens.
-		
-		return array();
+	public static function getObjectByContent($class) {
+		$query_string = "SELECT claims.id as itemID 
+						   FROM claims
+						  WHERE claims.content = ".DBConn::clean($class);
+		return array_pop(Claim::getObjects($query_string));
 	}
 	
 }

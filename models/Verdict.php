@@ -24,6 +24,8 @@ class Verdict extends FactoryObject implements JSONObject {
 	private $claimID; // int
 	private $resultClassID; //int
 	private $vettingServiceID; //int
+	private $shortReason; // str
+	private $longReason; // str
 	private $url; // str
 	private $dateCreated; // timestamp
 	
@@ -35,7 +37,7 @@ class Verdict extends FactoryObject implements JSONObject {
     
 	
 	# FactoryObject Methods
-	protected static function gatherData($objectString) {
+	protected static function gatherData($objectString, $start=FactoryObject::LIMIT_BEGINNING, $length=FactoryObject::LIMIT_ALL) {
 		$data_arrays = array();
 		
 		// Load an empty object
@@ -45,6 +47,8 @@ class Verdict extends FactoryObject implements JSONObject {
 			$data_array['claimID'] = 0;
 			$data_array['resultClassID'] = 0;
 			$data_array['vettingServiceID'] = 0;
+			$data_array['shortReason'] = "";
+			$data_array['longReason'] = "";
 			$data_array['url'] = "";
 			$data_array['dateCreated'] = 0;
 			$data_arrays[] = $data_array;
@@ -58,6 +62,8 @@ class Verdict extends FactoryObject implements JSONObject {
 			$data_array['claimID'] = 0;
 			$data_array['resultClassID'] = 0;
 			$data_array['vettingServiceID'] = 0;
+			$data_array['shortReason'] = "";
+			$data_array['longReason'] = "";
 			$data_array['url'] = "";
 			$data_array['dateCreated'] = 0;
 			$data_arrays[] = $data_array;
@@ -72,10 +78,16 @@ class Verdict extends FactoryObject implements JSONObject {
 							   verdicts.claim_id AS claimID,
    							   verdicts.result_class_id AS resultClassID,
    							   verdicts.vetting_service_id AS vettingServiceID,
+   							   verdicts.short_reason AS shortReason,
+   							   verdicts.long_reason AS longReason,
 							   verdicts.url AS url,
 							   unix_timestamp(verdicts.date_created) as dateCreated
 						  FROM verdicts
 						 WHERE verdicts.id IN (".$objectString.")";
+		if($length != FactoryObject::LIMIT_ALL) {
+			$query_string .= "
+						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
+		}
 		
 		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
@@ -86,6 +98,8 @@ class Verdict extends FactoryObject implements JSONObject {
 			$data_array['claimID'] = $resultArray['claimID'];
 			$data_array['resultClassID'] = $resultArray['resultClassID'];
 			$data_array['vettingServiceID'] = $resultArray['vettingServiceID'];
+			$data_array['shortReason'] = $resultArray['shortReason'];
+			$data_array['longReason'] = $resultArray['longReason'];
 			$data_array['url'] = $resultArray['url'];
 			$data_array['dateCreated'] = $resultArray['dateCreated'];
 			$data_arrays[] = $data_array;
@@ -100,6 +114,8 @@ class Verdict extends FactoryObject implements JSONObject {
 		$this->claimID = isset($data_array["claimID"])?$data_array["claimID"]:0;
 		$this->resultClassID = isset($data_array["resultClassID"])?$data_array["resultClassID"]:0;
 		$this->vettingServiceID = isset($data_array["vettingServiceID"])?$data_array["vettingServiceID"]:0;
+		$this->shortReason = isset($data_array["shortReason"])?$data_array["shortReason"]:"";
+		$this->longReason = isset($data_array["longReason"])?$data_array["longReason"]:"";
 		$this->url = isset($data_array["url"])?$data_array["url"]:"";
 		$this->dateCreated = isset($data_array["dateCreated"])?$data_array["dateCreated"]:0;
 	}
@@ -109,6 +125,8 @@ class Verdict extends FactoryObject implements JSONObject {
 	public function toJSON() {
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
+			"short_reason": '.DBConn::clean($this->getShortReason()).',
+			"long_reason": '.DBConn::clean($this->getLongReason()).',
 			"url": '.DBConn::clean($this->getURL()).',
 			"date_created": '.DBConn::clean($this->getDateCreated()).',
 			"result_class": '.$this->getResultClass()->toJSON().',
@@ -134,6 +152,8 @@ class Verdict extends FactoryObject implements JSONObject {
 							   SET verdicts.claim_id = ".DBConn::clean($this->getClaimID()).",
 								   verdicts.result_class_id = ".DBConn::clean($this->getResultClassID()).",
 								   verdicts.vetting_service_id = ".DBConn::clean($this->getVettingServiceID()).",
+								   verdicts.short_reason = ".DBConn::clean($this->getShortReason()).",
+								   verdicts.long_reason = ".nl2br(DBConn::clean($this->getLongReason())).",
 								   verdicts.url = ".DBConn::clean($this->getURL())."
 							 WHERE verdicts.id = ".DBConn::clean($this->getItemID());
 							
@@ -145,12 +165,16 @@ class Verdict extends FactoryObject implements JSONObject {
 									verdicts.claim_id,
 									verdicts.result_class_id,
 									verdicts.vetting_service_id,
+									verdicts.short_reason,
+									verdicts.long_reason,
 									verdicts.url,
 									verdicts.date_created)
 							VALUES (0,
 									".DBConn::clean($this->getClaimID()).",
 									".DBConn::clean($this->getResultClassID()).",
 									".DBConn::clean($this->getVettingServiceID()).",
+									".DBConn::clean($this->getShortReason()).",
+									".DBConn::clean($this->getLongReason()).",
 									".DBConn::clean($this->getURL()).",
 									NOW())";
 			
@@ -180,6 +204,10 @@ class Verdict extends FactoryObject implements JSONObject {
 	
 	public function getResultClassID() { return $this->resultClassID;}
 	
+	public function getShortReason() { return $this->shortReason;}
+	
+	public function getLongReason() { return $this->longReason;}
+	
 	public function getURL() { return $this->url;}
 	
 	public function getDateCreated() { return $this->dateCreated;}
@@ -196,7 +224,7 @@ class Verdict extends FactoryObject implements JSONObject {
 		return $this->claim = Claim::getObject($this->getClaimID());
 	}
 	
-    public function getVettingService() {
+	public function getVettingService() {
 		if($this->vettingService != null)
 			return $this->vettingService;
 		return $this->vettingService = VettingService::getObject($this->getVettingServiceID());
@@ -207,9 +235,13 @@ class Verdict extends FactoryObject implements JSONObject {
 	public function setClaimID($int) { $this->claimID = $int;}
 	
 	public function setResultClassID($int) { $this->resultClassID = $int;}
-    
+	
 	public function setVettingServiceID($int) { $this->vettingServiceID = $int;}
-    
+	
+	public function setShortReason($str) { $this->shortReason = $str;}
+	
+	public function setLongReason($str) { $this->longReason = $str;}
+	
 	public function setURL($str) { $this->url = $str;}
 	
 }

@@ -9,11 +9,13 @@ require_once("DBConn.php");
 require_once("FactoryObject.php");
 require_once("JSONObject.php");
 require_once("Claim.php");
+require_once("Token.php");
 
 class Snippet extends FactoryObject implements JSONObject {
 	
 	# Constants
-	
+	const MATCH_PERFECT = "perfect";
+	const MATCH_LOOSE = "loose";
 	
 	# Static Variables
 	
@@ -30,7 +32,7 @@ class Snippet extends FactoryObject implements JSONObject {
 	
 	
 	# FactoryObject Methods
-	protected static function gatherData($objectString) {
+	protected static function gatherData($objectString, $start=FactoryObject::LIMIT_BEGINNING, $length=FactoryObject::LIMIT_ALL) {
 		$data_arrays = array();
 		
 		// Load an empty object
@@ -68,6 +70,10 @@ class Snippet extends FactoryObject implements JSONObject {
 							   snippets.context AS context
 						  FROM snippets
 						 WHERE snippets.id IN (".$objectString.")";
+		if($length != FactoryObject::LIMIT_ALL) {
+			$query_string .= "
+						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
+		}
 		
 		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
@@ -156,6 +162,21 @@ class Snippet extends FactoryObject implements JSONObject {
 			$this->setItemID($mysqli->insert_id);
 		}
 		
+		// Delete old tokens
+		$tokens = Token::getObjectsBySnippet($this->getItemID());
+		foreach($tokens as $token)
+			$token->delete();
+			
+		// Store new tokens
+		$token_strings = Token::tokenize($this->getContent());
+		foreach($token_strings as $token_string) {
+			if($token_string == "") continue;
+			$token = new Token();
+			$token->setSnippetID($this->getItemID());
+			$token->setContent($token_string);
+			$token->save();
+		}
+		
 		// Parent Operations
 		return parent::save();
 	}
@@ -168,6 +189,12 @@ class Snippet extends FactoryObject implements JSONObject {
 		$query_string = "DELETE FROM snippets
 							  WHERE snippets.id = ".DBConn::clean($this->getItemID());
 		$mysqli->query($query_string);
+		
+		// Delete tokens associated with this record
+		$tokens = Token::getObjectsBySnippet($this->getItemID());
+		foreach($tokens as $token)
+			$token->delete();
+		
 	}
 	
 	
@@ -202,13 +229,36 @@ class Snippet extends FactoryObject implements JSONObject {
 	
 	
 	# Static Methods
-	public static function getObjectsByContext($context) {
-		$query_string = "SELECT distinct snippets.id
-						  FROM snippets
-						 WHERE snippets.context_code = ".DBConn::clean(Snippet::codify($context))."
-							OR ".DBConn::clean(Snippet::codify($context))." LIKE concat('%',snippets.content_code,'%')";
+	public static function getObjectsByContext($context, $accuracy = Snippet::MATCH_PERFECT) {
 		
-		return Snippet::getObjects($query_string);
+		switch($accuracy) {
+			case Snippet::MATCH_PERFECT:
+				$query_string = "SELECT distinct snippets.id
+								  FROM snippets
+								 WHERE snippets.context_code = ".DBConn::clean(Snippet::codify($context))."
+									OR ".DBConn::clean(Snippet::codify($context))." LIKE concat('%',snippets.content_code,'%')";
+		
+				return Snippet::getObjects($query_string);
+			
+			case Snippet::MATCH_LOOSE:
+				$token_strings = Token::tokenize($context);
+				$query_string = "SELECT snippets.id as snippetID,
+										count(tokens.id) as match_count,
+										(select count(tokens.id) from tokens where tokens.snippet_id = snippets.id) as total_count
+								   FROM tokens
+								   JOIN snippets ON (tokens.snippet_id = snippets.id)
+								  WHERE tokens.content IN (".implode(",",DBConn::clean($token_strings)).")
+							   GROUP BY snippets.id
+								 HAVING match_count / total_count > .8";
+		
+				$mysqli = DBConn::connect();
+				$result = $mysqli->query($query_string) or print($mysqli->error);
+		
+				while($resultArray = $result->fetch_assoc())
+					$snippet_ids[] = $resultArray['snippetID'];
+		
+				return Snippet::getObjects($snippet_ids);
+		}
 	}
 	
 	public static function getObjectsByContent($content) {
@@ -220,6 +270,16 @@ class Snippet extends FactoryObject implements JSONObject {
 		$str = preg_replace("/[^A-Za-z0-9]/","",$str);
 		$str = strtolower($str);
 		return $str;
+	}
+	
+	public static function getExpression($str) {
+		// Create a regular expression which will more accuarately find the snippet
+		$str = preg_replace('/\W+/',' ',$str);
+		$str = trim($str);
+		$str = preg_replace('/\s+/','\\W+',$str);
+		
+		$exp = '/'.$str.'/i';
+		return $exp;
 	}
 	
 }

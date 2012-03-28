@@ -3,6 +3,7 @@
 set_include_path($_SERVER['DOCUMENT_ROOT']);
 require_once("models/DBConn.php");
 require_once("models/Snippet.php");
+require_once("models/Token.php");
 require_once("models/Verdict.php");
 require_once("models/Claim.php");
 require_once("models/ResultClass.php");
@@ -15,6 +16,7 @@ $mysqli->query("delete from verdicts");
 $mysqli->query("delete from claims");
 $mysqli->query("delete from result_classes");
 $mysqli->query("delete from corpus_items");
+$mysqli->query("delete from tokens");
 
 // Add in the result classes
 $RC_pants = new ResultClass();

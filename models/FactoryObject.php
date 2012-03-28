@@ -14,6 +14,11 @@ abstract class FactoryObject {
 	const INIT_EMPTY = -1;
 	const INIT_DEFAULT = 0;
 	
+	// Limit Types
+	const LIMIT_BEGINNING = 0;
+	const LIMIT_ALL = NULL;
+	
+	
 	
 	# Instance Variables
 	protected $itemID = 0;
@@ -27,7 +32,7 @@ abstract class FactoryObject {
 	
 	
 	# FactoryObject Methods
-	abstract protected static function gatherData($objectString);
+	abstract protected static function gatherData($objectString, $start=FactoryObject::LIMIT_BEGINNING, $length=FactoryObject::LIMIT_ALL);
 	
 	protected function load($data_array) {
 		// Set the item ID
@@ -73,7 +78,7 @@ abstract class FactoryObject {
 		return $newObject;
 	}
 	
-	public static function getObjects($objectSelectors) {
+	public static function getObjects($objectSelectors, $start=FactoryObject::LIMIT_BEGINNING, $length=FactoryObject::LIMIT_ALL) {
 		// Takes in either an array of object IDs or a clean query
 		
 		// If it's an array clean it and convert it to a string
@@ -86,7 +91,7 @@ abstract class FactoryObject {
 			return array();
 		
 		// Load the data
-		$data_arrays = static::gatherData($objectSelectors);
+		$data_arrays = static::gatherData($objectSelectors, $start, $length);
 		if(sizeof($data_arrays) == 0)
 			return array();
 		

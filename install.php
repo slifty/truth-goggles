@@ -157,7 +157,40 @@ switch($version) {
 		
 		echo("Updating app version\n");
 		$mysqli->query("UPDATE appinfo set version ='11';") or print($mysqli->error);
+		
+	case 11:
+		echo("Updating verdicts table\n");
+		$mysqli->query("ALTER TABLE verdicts
+					      ADD COLUMN short_reason text AFTER vetting_service_id,
+					      ADD COLUMN long_reason text AFTER short_reason") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("UPDATE appinfo set version ='12';") or print($mysqli->error);
 	
+	case 12:
+		echo("Updating all tables to use UTF8\n");
+		$mysqli->query("ALTER TABLE appinfo CONVERT TO CHARACTER SET utf8");
+		$mysqli->query("ALTER TABLE arguments CONVERT TO CHARACTER SET utf8");
+		$mysqli->query("ALTER TABLE claims CONVERT TO CHARACTER SET utf8");
+		$mysqli->query("ALTER TABLE contexts CONVERT TO CHARACTER SET utf8");
+		$mysqli->query("ALTER TABLE corpus_items CONVERT TO CHARACTER SET utf8");
+		$mysqli->query("ALTER TABLE result_classes CONVERT TO CHARACTER SET utf8");
+		$mysqli->query("ALTER TABLE snippets CONVERT TO CHARACTER SET utf8");
+		$mysqli->query("ALTER TABLE verdicts CONVERT TO CHARACTER SET utf8");
+		$mysqli->query("ALTER TABLE vetting_services CONVERT TO CHARACTER SET utf8");
+		
+		echo("Updating app version\n");
+		$mysqli->query("UPDATE appinfo set version ='13';") or print($mysqli->error);
+
+	case 13:
+		echo("Creating tokens table\n");
+		$mysqli->query("CREATE TABLE tokens (id int auto_increment primary key,
+											snippet_id int,
+											content tinytext)") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("UPDATE appinfo set version ='14';") or print($mysqli->error);
+		
 	default:
 		echo("Finished updating the schema\n");
 }

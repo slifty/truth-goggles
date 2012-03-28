@@ -27,7 +27,7 @@ class VettingService extends FactoryObject implements JSONObject {
 	
 	
 	# FactoryObject Methods
-	protected static function gatherData($objectString) {
+	protected static function gatherData($objectString, $start=FactoryObject::LIMIT_BEGINNING, $length=FactoryObject::LIMIT_ALL) {
 		$data_arrays = array();
 		
 		// Load an empty object
@@ -62,6 +62,10 @@ class VettingService extends FactoryObject implements JSONObject {
 							   vetting_services.logo_url AS logo_url
 						  FROM vetting_services
 						 WHERE vetting_services.id IN (".$objectString.")";
+		if($length != FactoryObject::LIMIT_ALL) {
+			$query_string .= "
+						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
+		}
 		
 		$result = $mysqli->query($query_string)
 			or print($mysqli->error);

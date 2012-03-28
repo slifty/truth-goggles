@@ -24,7 +24,7 @@
 			// Run through the snippets and generate JS Objects
 			$snippetJSON = array();
 			foreach($snippets as $snippet) {
-				$contentRegExp = '/'.preg_replace('/\s+/','\\s+',$snippet->getContent()).'/';
+				$contentRegExp = Snippet::getExpression($snippet->getContent()); 
 				$contentSplit = preg_split($contentRegExp, $context, null, PREG_SPLIT_OFFSET_CAPTURE);
 				$contentStart = strlen($contentSplit[0][0]);
 				
@@ -33,7 +33,7 @@
 					$snippetJSON[] = $snippet->toJSON($contentStart, $contentLength);
 					
 					// Update the content start for the next instance of the snippet (if it exists)
-					$contentStart = $contentSplit[$x][1] + strlen( $contentSplit[$x][0]);
+					$contentStart = $contentSplit[$x][1] + strlen($contentSplit[$x][0]);
 				}
 			}
 			
@@ -57,7 +57,7 @@
 			foreach($snippets as $snippet) {
 				$snippetJSON[] = $snippet->toJSON();
 			}
-		
+			
 			$collectionJSON = '{
 				"snippets": ['.implode(',', $snippetJSON).']
 			}';
@@ -69,9 +69,9 @@
 			foreach($snippets as $snippet) {
 				$snippetJSON[] = $snippet->toJSON();
 			}
-		
+			
 			$collectionJSON = '{
-		    	"snippets": ['.implode(',', $snippetJSON).']
+				"snippets": ['.implode(',', $snippetJSON).']
 			}';
 		}
 	}

@@ -36,7 +36,7 @@ class ResultClass extends FactoryObject implements JSONObject {
 	
 	
 	# FactoryObject Methods
-	protected static function gatherData($objectString) {
+	protected static function gatherData($objectString, $start=FactoryObject::LIMIT_BEGINNING, $length=FactoryObject::LIMIT_ALL) {
 		$data_arrays = array();
 		
 		// Load an empty object
@@ -71,6 +71,10 @@ class ResultClass extends FactoryObject implements JSONObject {
 								result_classes.class AS class
 						   FROM result_classes
 						  WHERE result_classes.id IN (".$objectString.")";
+		if($length != FactoryObject::LIMIT_ALL) {
+			$query_string .= "
+						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
+		}
 		
 		$result = $mysqli->query($query_string)
 			or print($mysqli->error);

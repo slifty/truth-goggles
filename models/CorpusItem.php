@@ -29,7 +29,7 @@ class CorpusItem extends FactoryObject implements JSONObject {
 	
 	
 	# FactoryObject Methods
-	protected static function gatherData($objectString) {
+	protected static function gatherData($objectString, $start=FactoryObject::LIMIT_BEGINNING, $length=FactoryObject::LIMIT_ALL) {
 		$data_arrays = array();
 		
 		// Load an empty object
@@ -64,6 +64,10 @@ class CorpusItem extends FactoryObject implements JSONObject {
 							   unix_timestamp(corpus_items.date_created) as dateCreated
 						  FROM corpus_items
 						 WHERE corpus_items.id IN (".$objectString.")";
+		if($length != FactoryObject::LIMIT_ALL) {
+			$query_string .= "
+						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
+		}
 		
 		$result = $mysqli->query($query_string)
 			or print($mysqli->error);
