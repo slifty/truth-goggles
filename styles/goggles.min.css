@@ -17,18 +17,37 @@ body.critical-modal-enabled {
 }
 
 /* Phrases */
+
+/* Transparent Mode */
 .critical-transparent .critical-phrase {
 	color: #000000;
-	background: #FF9999;
+	background: #FFFF99;
 	cursor: pointer;
 }
 .critical-transparent .critical-viewed {
-	background: #ddddaa;
+	background: #CCCCBB;
+}
+.critical-transparent .critical-antisnippet {
 }
 
+/* Goggles Mode */
+.critical-goggles .critical-phrase {
+	color: #000000;
+	background: #FFFF99;
+	cursor: pointer;
+}
+.critical-goggles .critical-viewed {
+	background: #CCCCBB;
+}
+.critical-goggles .critical-antisnippet {
+	color: transparent;
+	text-shadow: 0 0 6px rgba(0,0,0,0.5);
+}
+
+/* Safe Mode */
 .critical-safe .critical-phrase {
 	color: #000000;
-	background: #ffcccc;
+	background: #FFFF99;
 	cursor: pointer;
 	display:inline-block;
 	text-indent: -99999px;
@@ -39,9 +58,13 @@ body.critical-modal-enabled {
 	text-indent: 0px;
 	border: none;
 	display: inline;
-	background: #ddddaa;
+	background: #CCCCBB;
+}
+.critical-safe .critical-antisnippet {
 }
 
+
+/* Modal Pane */
 .critical-phrase.critical-active {
 	color: #333333;
 	background: #FFFFFF;
@@ -54,8 +77,6 @@ body.critical-modal-enabled {
 	cursor: default;
 }
 
-
-/* Modal Pane */
 #critical-modal {
 	background: #000000;
 	position: fixed;

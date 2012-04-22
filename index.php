@@ -65,12 +65,13 @@
 	    <div class="clear"></div><!--this makes the truth-o-meter push the bottom of the container it's in down.-->
       </div>
 </div>
-		<script type="text/javascript">
-			var goggles_domain='http://127.0.0.1/truth-goggles';
-			var s=document.createElement('script');
-			s.type='text/javascript';
-			document.body.appendChild(s);
-			s.src=goggles_domain+'/goggles_bookmarklet.min.js';
-		</script>
+	<script type="text/javascript">
+		var goggles_domain='http://localhost/truth-goggles';
+		var s=document.createElement('script');
+		s.type='text/javascript';
+		document.body.appendChild(s);
+		s.src=goggles_domain+'/goggles_bookmarklet.min.js';
+	</script>
+	
 	</body>
 </html>
