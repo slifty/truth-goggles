@@ -7,9 +7,11 @@
 	border: 0px;
 	text-indent: 0px;
 	text-decoration: none;
-	font-style: none;
+	font-style: normal;
 	font-size: 14px;
-} 
+	text-align: left;
+	width: auto;
+}
 
 body.critical-modal-enabled {
 	height: 100%;

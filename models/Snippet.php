@@ -278,7 +278,7 @@ class Snippet extends FactoryObject implements JSONObject {
 		$str = trim($str);
 		$str = preg_replace('/\s+/','\\W+',$str);
 		
-		$exp = '/'.$str.'/i';
+		$exp = '/[^\w\s]+'.$str.'[^\w\s]+/i';
 		return $exp;
 	}
 	
