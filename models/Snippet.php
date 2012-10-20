@@ -237,7 +237,7 @@ class Snippet extends FactoryObject implements JSONObject {
 								  FROM snippets
 								 WHERE snippets.context_code = ".DBConn::clean(Snippet::codify($context))."
 									OR ".DBConn::clean(Snippet::codify($context))." LIKE concat('%',snippets.content_code,'%')";
-		
+				
 				return Snippet::getObjects($query_string);
 			
 			case Snippet::MATCH_LOOSE:
