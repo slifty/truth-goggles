@@ -1,3 +1,2 @@
 conf.php
-.htaccess
-scrapers/*
+rake/scrapers/*

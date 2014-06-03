@@ -1,23 +1,22 @@
 == INSTALL ==
 cp conf-default.php conf.php
-edit conf.php
-cp .htaccess-default .htaccess
-edit .htaccess
-php install.php
-php datarake.php
-
+vi conf.php
+php rake/db_rake.php
+php rake/data_rake.php
 
 == UPDATE ==
-php install.php
-
+php rake/db_rake.php
 
 == DATA REFRESH  == 
 // CAUTION: this may delete data you wanted to keep -- be sure to backup the schema if you want to retain your information
-php datarake.php
+php rake/data_rake.php
 
 
 ==Fake lightweight "Framework"==
 Models are in the models folder
 No controllers, but instead actions are autorouted to the proper page
-URL style is "something.com/?p=[page]&a=[action]
+URL style is "something.com/[page]/[action]
 DIR style is /pages/[page]/[action].php
+
+API URL style is "something.com/api/[page]/[action]
+API DIR style is /api/[page]/[method]_[action].php

@@ -1,0 +1,52 @@
+body {
+	font-family: 'PT Sans', sans-serif;
+}
+
+form ul {
+	list-style: none;
+}
+form ul li {
+	
+}
+form ul li label {
+	float: left;
+	width: 150px;
+	cursor: pointer;
+}
+
+form ul li label.checkbox {
+	float: none;
+}
+
+.frame {
+	display: none;
+}
+
+.question_type h4 {
+	cursor: pointer;
+}
+
+#content {
+	margin: 40px;
+	padding: 40px;
+	border: 2px solid black;	
+}
+
+
+#url-input {
+	width: 250px;
+}
+#article-input {
+	width: 500px;
+	height: 400px;
+}
+
+#selectable-content p {
+	
+}
+#selectable-content p span.sentence {
+	cursor: pointer;
+}
+#selectable-content p span.sentence.selected {
+	background: #bfffff;
+}

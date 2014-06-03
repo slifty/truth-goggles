@@ -1,0 +1,11 @@
+RewriteEngine on
+
+# Disable rewrite if the request is a valid directory, file, link
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Enable the API
+RewriteRule ^api.* "index.php?api=1" [QSA,L]
+
+# Enable Engine Rendering
+RewriteRule ^ "index.php" [L]

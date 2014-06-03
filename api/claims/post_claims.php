@@ -1,9 +1,4 @@
 <?PHP
-	set_include_path($_SERVER['DOCUMENT_ROOT']);
-	require_once("conf.php");
-	include_once("models/Claim.php");
-	include_once("models/Snippet.php");
-	//ini_set('memory_limit', '-1'); // HORRIBLE IDEA but needed for the moment.  Need to go through and optimize / remove leaks
 	
 	$collectionJSON = "";
 	if($resourceIdentifier) {
@@ -15,6 +10,8 @@
 		if (isset($_POST['context'])) {
 			$context = utf8_decode($_POST['context']);
 			$oid = isset($_POST['oid'])?$_POST['oid']:0;
+			
+			
 			
 			// Get a narrow list of possible snippets
 			$possible_snippets = Snippet::getObjectsByContext($context, Snippet::MATCH_LOOSE);
@@ -69,13 +66,10 @@
 			}
 			
 			// We now have a vector of hot spots, find the top phrase candidates
-			//print_r($match_tracker);
 			$finalists = array();
 			for($x = 0 ; $x < sizeof($match_tracker) ; $x++) {
 				$non_stop_cutoff = max(2, floor($match_tracker[$x]["non_stop_word_count"] * .5));
 				$cutoff = floor($match_tracker[$x]["word_count"] * .6);
-				//echo($match_tracker[$x]["word_count"]." :: ".$match_tracker[$x]["non_stop_word_count"]."\n");
-				//echo($non_stop_cutoff." :: ".$cutoff."\n");
 				$match_start = -1;
 				$match_end = -1;
 				for($y = 0 ; $y < sizeof($token_strings) ; $y++) {
@@ -87,20 +81,16 @@
 						);
 						$match_start = -1;
 						$match_end = -1;
-						//echo("END"."\n");
 					}
 					
 					if(($match_tracker[$x]["matches"][$y] >= $cutoff)
 					&& ($match_tracker[$x]["non_stop_matches"][$y] >= $non_stop_cutoff)) {
 						if($match_start == -1) {
 							$match_start = $y;
-							//echo("START"."\n");
 						}
 					}
 					elseif($match_start != -1)
 						$match_end = $y + $match_tracker[$x]["matches"][$y];
-						
-					//echo($x." ::".$match_tracker[$x]["matches"][$y].":".$match_tracker[$x]["non_stop_matches"][$y].":: ".$token_strings[$y]."\n");
 					
 				}
 			}

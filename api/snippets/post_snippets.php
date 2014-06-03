@@ -1,9 +1,4 @@
 <?PHP
-	set_include_path($_SERVER['DOCUMENT_ROOT']);
-	require_once("conf.php");
-	include_once("models/Claim.php");
-	include_once("models/Snippet.php");
-	
 	$collectionJSON = "";
 	if($resourceIdentifier) {
 		// Return a single object
