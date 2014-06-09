@@ -4,6 +4,8 @@ $(function() {
 	var current_sentence = 0;
 	var credibility_content = [];
 
+	var layer_id = 0;
+
 	var question_list = [
 		{
 			title: "Who",
@@ -92,17 +94,13 @@ $(function() {
 			var sentence_id = $this.data("sentence_id");
 			if($.inArray(sentence_id, used_sentences) == -1) {
 				used_sentences.push(sentence_id);
-				console.log(used_sentences);
 				$this.addClass("selected");
 				$this.css("background", randomColor({luminosity: 'light', hue: 'blue'}));
-				console.log("ADDED");
 			}
 			else {
 				used_sentences.splice(used_sentences.indexOf(sentence_id),1);
 				$this.removeClass("selected");
 				$this.css("background", "");
-
-				console.log("REMOVED");
 			}
 		})
 	}
@@ -116,60 +114,65 @@ $(function() {
 			.text(sentence);
 
 		var $credibility_prompts = $("#credibility-prompts");
+		$credibility_prompts.empty();
+		var $select_prompt = $("<select>")
+			.appendTo($credibility_prompts);
 		for(var x in question_list) {
 			var question_type = question_list[x];
 			var questions = question_type["questions"];
 			var title = question_type["title"];
-			var $question_type = $("<div>")
-				.addClass("question_type")
-				.appendTo($credibility_prompts);
-
-			var $question_type_title = $("<h4>")
-				.text(title)
-				.click(function() {
-					$(this).parent().find("ul")
-						.toggle();
-				})
-				.appendTo($question_type)
-
-			var $question_type = $("<ul>")
-				.hide()
-				.appendTo($question_type);
 
 			for(var y in questions) {
 				var question = questions[y];
-				console.log(question);
-				var $question = $("<li>")
-					.appendTo($question_type)
-				var $question_input = $("<input>")
-					.addClass("checkbox")
-					.attr("type","checkbox")
-					.attr("id","question-" + x + "-" + y)
-					.appendTo($question);
-				var $question_label = $("<label>")
-					.addClass("checkbox")
-					.attr("for","question-" + x + "-" + y)
+				var $question = $("<option>")
+					.attr("value", question)
 					.text(question)
-					.appendTo($question);
+					.appendTo($select_prompt)
 			}
 		}
+	}
+
+	// Save this single claim
+	function saveClaim(sentence_number) {
+		var sentence = processed_sentences[used_sentences[sentence_number]];
+		var long_explanation = $("#credibility-long-information").val();
+		var short_explanation = $("#credibility-short-information").val();
+		$("#credibility-short-information").val("");
+		$("#credibility-long-information").val("");
+
+		var content = {
+			"claim": sentence,
+			"long": long_explanation,
+			"short": short_explanation
+		};
+
+		credibility_content.push(content);
+	}
+
+	// Save the entire layer
+	function saveLayer() {
+		$.ajax({
+			"type": "post",
+			"data": credibility_content
+		}).done(function(data) {
+			layer_id = data.layer_id;
+		})
 	}
 
 
 	// Set up frame 1
 	$("#frame-1 #content-load-form").submit(function() {
-		var content = $("#article-input").text();
-		var paragraphs = str.match( /\n|\r/g );
+		var content = $("#article-input").val();
+		var paragraphs = content.split( /[\n\r]/g );
+		var prepared_content = [];
 		for(var x in paragraphs) {
 			var paragraph = paragraphs[x];
-			console.log(paragraph);
+			if(paragraph == "")
+				continue;
+			var sentences = paragraph.match( /[^\.!\?]+([\.!\?]+ )?/g );
+			prepared_content.push(sentences);
 		}
-		return false;
-		var result = str.match( /[^\.!\?]+[\.!\?]+/g );
-		loadContent(
-			[["This is a test.",
-			  "It has a few sentences!"],
-			 ["But also a few paragraphs."]]);
+		loadContent(prepared_content)
 		switchFrame(2);
 		return false;
 	});
@@ -182,7 +185,17 @@ $(function() {
 	})
 
 	// Set up frame 3
-
+	$("#frame-3 #credibility-definition-form").submit(function() {
+		saveClaim(current_sentence);
+		current_sentence++;
+		if(current_sentence == used_sentences.length) {
+			saveLayer();
+			switchFrame(4);
+		} else {
+			loadQuestions(current_sentence);
+		}
+		return false;
+	})
 
 	// Start the experience
 	loadContent(
@@ -190,6 +203,5 @@ $(function() {
 		  "It has a few sentences!"],
 		 ["But also a few paragraphs."]]);
 	switchFrame(2);
-	switchFrame(1);
 
 });

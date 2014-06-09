@@ -4,7 +4,7 @@ require_once(__DIR__."/DBConn.php");
 require_once(__DIR__."/FactoryObject.php");
 require_once(__DIR__."/JSONObject.php");
 
-class Question extends FactoryObject implements JSONObject {
+class Layer extends FactoryObject implements JSONObject {
 	
 	# Constants
 	
@@ -13,13 +13,11 @@ class Question extends FactoryObject implements JSONObject {
 	
 	
 	# Instance Variables
-	private $contributionID;// int
-	private $content; 		// string
 	private $dateCreated; 	// timestamp
 	
 	
 	# Caches
-	private $contribution;
+	private $contributions;
 	
 	
 	# FactoryObject Methods
@@ -30,8 +28,6 @@ class Question extends FactoryObject implements JSONObject {
 		if($objectString === FactoryObject::INIT_EMPTY) {
 			$data_array = array();
 			$data_array['itemID'] = 0;
-			$data_array['contributionID'] = 0;
-			$data_array['content'] = "";
 			$data_array['dateCreated'] = 0;
 			$data_arrays[] = $data_array;
 			return $data_arrays;
@@ -41,8 +37,6 @@ class Question extends FactoryObject implements JSONObject {
 		if($objectString === FactoryObject::INIT_DEFAULT) {
 			$data_array = array();
 			$data_array['itemID'] = 0;
-			$data_array['contributionID'] = 0;
-			$data_array['content'] = "";
 			$data_array['dateCreated'] = 0;
 			$data_arrays[] = $data_array;
 			return $data_arrays;
@@ -52,12 +46,10 @@ class Question extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$query_string = "SELECT questions.id AS itemID,
-							   questions.contribution_id AS contributionID,
-							   questions.content AS content,
-							   unix_timestamp(questions.date_created) as dateCreated
-						  FROM questions
-						 WHERE questions.id IN (".$objectString.")";
+		$query_string = "SELECT layers.id AS itemID,
+							   unix_timestamp(layers.date_created) as dateCreated
+						  FROM claims
+						 WHERE layers.id IN (".$objectString.")";
 		if($length != FactoryObject::LIMIT_ALL) {
 			$query_string .= "
 						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
@@ -69,8 +61,6 @@ class Question extends FactoryObject implements JSONObject {
 		while($resultArray = $result->fetch_assoc()) {
 			$data_array = array();
 			$data_array['itemID'] = $resultArray['itemID'];
-			$data_array['contributionID'] = $resultArray['contributionID'];
-			$data_array['content'] = $resultArray['content'];
 			$data_array['dateCreated'] = $resultArray['dateCreated'];
 			$data_arrays[] = $data_array;
 		}
@@ -81,19 +71,22 @@ class Question extends FactoryObject implements JSONObject {
 	
 	public function load($data_array) {
 		parent::load($data_array);
-		$this->contributionID = isset($data_array["contributionID"])?$data_array["contributionID"]:0;
-		$this->content = isset($data_array["content"])?$data_array["content"]:"";
 		$this->dateCreated = isset($data_array["dateCreated"])?$data_array["dateCreated"]:0;
 	}
 	
 	
 	# JSONObject Methods
 	public function toJSON($contentStart=null, $contentLength=null) {
+		$contributions = $this->getContributions();
+
+		$contributionsJSONArray = array();
+		foreach($contributions as $object)
+			$contributionsJSONArray[] = $object->toJSON();
+		$contributionsJSON = "[".implode(",",$contributionsJSONArray)."]";
 
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
-			"contribution_id": '.DBConn::clean($this->getContributionID()).',
-			"content": '.$content.'
+			"contributions": '.$contributionsJSON.'
 		}';
 		return $json;
 	}
@@ -110,24 +103,12 @@ class Question extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		if($this->isUpdate()) {
-			// Update an existing record
-			$query_string = "UPDATE questions
-							   SET questions.contribution_id = ".DBConn::clean($this->getContributionID()).",
-							       questions.content = ".DBConn::clean($this->getContent())."
-							 WHERE questions.id = ".DBConn::clean($this->getItemID());
-							
-			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$query_string = "INSERT INTO questions
-								   (questions.id,
-									questions.contribution_id,
-									questions.content,
-									questions.date_created)
+			$query_string = "INSERT INTO layers
+								   (layers.id,
+									layers.date_created)
 							VALUES (0,
-									".DBConn::clean($this->getContributionID()).",
-									".DBConn::clean($this->getSummary()).",
-									".DBConn::clean($this->getContent()).",
 									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
 			
@@ -144,25 +125,28 @@ class Question extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$query_string = "DELETE FROM questions
-							  WHERE questions.id = ".DBConn::clean($this->getItemID());
+		$query_string = "DELETE FROM layers
+							  WHERE layers.id = ".DBConn::clean($this->getItemID());
 		$mysqli->query($query_string);
 	}
 	
 	
 	# Getters
-	public function getContributionID() { return $this->contributionID; }
-
-	public function getContent() { return $this->content; }
-
 	public function getDateCreated() { return $this->dateCreated; }
 	
-
+	public function getContributions() {
+		if($this->contributions != null)
+			return $this->contributions;
+		
+		$query_string = "SELECT contributions.id
+						  FROM contributions
+						 WHERE contributions.layer_id = ".DBConn::clean($this->getItemID());
+		
+		return $this->contributions = Contribution::getObjects($query_string);
+	}
+	
 	# Setters
-	public function setContributionID($int) { $this->contributionID = $int; }
-
-	public function setContent($str) { $this->content = $str; }
-
+	# 
 }
 
 ?>

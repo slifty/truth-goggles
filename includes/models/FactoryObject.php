@@ -1,10 +1,4 @@
 <?php
-###
-# Info:
-#  Last Updated 2011
-#  Daniel Schultz
-#
-###
 require_once(__DIR__."/DBConn.php");
 
 abstract class FactoryObject {

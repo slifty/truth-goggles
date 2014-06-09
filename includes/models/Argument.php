@@ -3,10 +3,8 @@
 require_once(__DIR__."/DBConn.php");
 require_once(__DIR__."/FactoryObject.php");
 require_once(__DIR__."/JSONObject.php");
-require_once(__DIR__."/Verdict.php");
-require_once(__DIR__."/Snippet.php");
 
-class Claim extends FactoryObject implements JSONObject {
+class Argument extends FactoryObject implements JSONObject {
 	
 	# Constants
 	
@@ -15,15 +13,14 @@ class Claim extends FactoryObject implements JSONObject {
 	
 	
 	# Instance Variables
+	private $contributionID;// int
+	private $summary; 		// string
 	private $content; 		// string
-	private $dateRecorded; 	// timestamp
 	private $dateCreated; 	// timestamp
 	
 	
 	# Caches
-	private $verdicts;
-	private $snippets;
-	private $corpusItems;
+	private $contribution;
 	
 	
 	# FactoryObject Methods
@@ -34,8 +31,9 @@ class Claim extends FactoryObject implements JSONObject {
 		if($objectString === FactoryObject::INIT_EMPTY) {
 			$data_array = array();
 			$data_array['itemID'] = 0;
+			$data_array['contributionID'] = 0;
+			$data_array['summary'] = "";
 			$data_array['content'] = "";
-			$data_array['dateRecorded'] = 0;
 			$data_array['dateCreated'] = 0;
 			$data_arrays[] = $data_array;
 			return $data_arrays;
@@ -45,8 +43,9 @@ class Claim extends FactoryObject implements JSONObject {
 		if($objectString === FactoryObject::INIT_DEFAULT) {
 			$data_array = array();
 			$data_array['itemID'] = 0;
+			$data_array['contributionID'] = 0;
+			$data_array['summary'] = "";
 			$data_array['content'] = "";
-			$data_array['dateRecorded'] = 0;
 			$data_array['dateCreated'] = 0;
 			$data_arrays[] = $data_array;
 			return $data_arrays;
@@ -56,12 +55,13 @@ class Claim extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$query_string = "SELECT claims.id AS itemID,
-							   claims.content AS content,
-							   unix_timestamp(claims.date_recorded) as dateRecorded,
-							   unix_timestamp(claims.date_created) as dateCreated
-						  FROM claims
-						 WHERE claims.id IN (".$objectString.")";
+		$query_string = "SELECT arguments.id AS itemID,
+							   arguments.contribution_id AS contributionID,
+							   arguments.summary AS summary,
+							   arguments.content AS content,
+							   unix_timestamp(argiments.date_created) as dateCreated
+						  FROM arguments
+						 WHERE arguments.id IN (".$objectString.")";
 		if($length != FactoryObject::LIMIT_ALL) {
 			$query_string .= "
 						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
@@ -73,8 +73,9 @@ class Claim extends FactoryObject implements JSONObject {
 		while($resultArray = $result->fetch_assoc()) {
 			$data_array = array();
 			$data_array['itemID'] = $resultArray['itemID'];
+			$data_array['contributionID'] = $resultArray['contributionID'];
+			$data_array['summary'] = $resultArray['summary'];
 			$data_array['content'] = $resultArray['content'];
-			$data_array['dateRecorded'] = $resultArray['dateRecorded'];
 			$data_array['dateCreated'] = $resultArray['dateCreated'];
 			$data_arrays[] = $data_array;
 		}
@@ -85,27 +86,21 @@ class Claim extends FactoryObject implements JSONObject {
 	
 	public function load($data_array) {
 		parent::load($data_array);
+		$this->contributionID = isset($data_array["contributionID"])?$data_array["contributionID"]:0;
+		$this->summary = isset($data_array["summary"])?$data_array["summary"]:"";
 		$this->content = isset($data_array["content"])?$data_array["content"]:"";
-		$this->dateRecorded = isset($data_array["dateRecorded"])?$data_array["dateRecorded"]:0;
 		$this->dateCreated = isset($data_array["dateCreated"])?$data_array["dateCreated"]:0;
 	}
 	
 	
 	# JSONObject Methods
 	public function toJSON($contentStart=null, $contentLength=null) {
-		$verdicts = $this->getVerdicts();
-		$verdictsJSONArray = array();
-		foreach($verdicts as $verdict)
-			$verdictsJSONArray[] = $verdict->toJSON();
-		$verdictsJSON = "[".implode(",",$verdictsJSONArray)."]";
-		
+
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
-			"content": '.DBConn::clean($this->getContent()).',
-			"date_recorded": '.DBConn::clean($this->getDateRecorded()).',
-			"verdicts": '.$verdictsJSON.'
-			'.(($contentStart)?', "content_start": '.DBConn::clean($contentStart):'').'
-			'.(($contentLength)?', "content_length": '.DBConn::clean($contentLength):'').'
+			"contribution_id": '.DBConn::clean($this->getContributionID()).',
+			"summary": '.$summary.',
+			"content": '.$content.'
 		}';
 		return $json;
 	}
@@ -123,19 +118,24 @@ class Claim extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$query_string = "UPDATE claims
-							   SET claims.content = ".DBConn::clean($this->getContent())."
-							 WHERE claims.id = ".DBConn::clean($this->getItemID());
+			$query_string = "UPDATE arguments
+							   SET arguments.contribution_id = ".DBConn::clean($this->getContributionID()).",
+							       arguments.summary = ".DBConn::clean($this->getSummary()).",
+							       arguments.content = ".DBConn::clean($this->getContent())."
+							 WHERE arguments.id = ".DBConn::clean($this->getItemID());
 							
 			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$query_string = "INSERT INTO claims
-								   (claims.id,
-									claims.content,
-									claims.date_recorded,
-									claims.date_created)
+			$query_string = "INSERT INTO arguments
+								   (arguments.id,
+									arguments.contribution_id,
+									arguments.summary,
+									arguments.content,
+									arguments.date_created)
 							VALUES (0,
+									".DBConn::clean($this->getContributionID()).",
+									".DBConn::clean($this->getSummary()).",
 									".DBConn::clean($this->getContent()).",
 									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
@@ -153,67 +153,29 @@ class Claim extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$query_string = "DELETE FROM claims
-							  WHERE claims.id = ".DBConn::clean($this->getItemID());
+		$query_string = "DELETE FROM arguments
+							  WHERE arguments.id = ".DBConn::clean($this->getItemID());
 		$mysqli->query($query_string);
 	}
 	
 	
 	# Getters
+	public function getContributionID() { return $this->contributionID; }
+
+	public function getSummary() { return $this->summary; }
+
 	public function getContent() { return $this->content; }
-	
-	public function getDateRecorded() { return $this->dateRecorded; }
 
 	public function getDateCreated() { return $this->dateCreated; }
 	
-	public function getVerdicts() {
-		if($this->verdicts != null)
-			return $this->verdicts;
-		
-		$query_string = "SELECT verdicts.id
-						  FROM verdicts
-						 WHERE verdicts.claim_id = ".DBConn::clean($this->getItemID());
-		
-		return $this->verdicts = Verdict::getObjects($query_string);
-	}
-	
-	public function getSnippets() {
-		if($this->snippets != null)
-			return $this->snippets;
-		
-		$query_string = "SELECT snippets.id
-						  FROM snippets
-						 WHERE snippets.claim_id = ".DBConn::clean($this->getItemID());
-		
-		return $this->snippets = Snippet::getObjects($query_string);
-	}
-	
-	public function getCorpusItems() {
-		if($this->corpusItems != null)
-			return $this->corpusItems;
-		
-		$query_string = "SELECT corpus_items.id
-						  FROM corpus_items
-						 WHERE corpus_items.claim_id = ".DBConn::clean($this->getItemID());
-		
-		return $this->corpusItems = CorpusItem::getObjects($query_string);
-	}
-	
-	
+
 	# Setters
+	public function setContributionID($int) { $this->contributionID = $int; }
+
+	public function setSummary($str) { $this->summary = $str; }
+
 	public function setContent($str) { $this->content = $str; }
-	
-	public function setDateRecorded($timestamp) { $this->dateRecorded = $timestamp; }
-	
-	
-	# Static Methods
-	public static function getObjectByContent($class) {
-		$query_string = "SELECT claims.id as itemID 
-						   FROM claims
-						  WHERE claims.content = ".DBConn::clean($class);
-		return array_pop(Claim::getObjects($query_string));
-	}
-	
+
 }
 
 ?>

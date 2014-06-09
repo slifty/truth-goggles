@@ -13,7 +13,7 @@
 				<h2>What do you want to create a layer for?</h2>
 				<form id="content-load-form">
 					<ul>
-						<li><label for="article-input">Use an article:</label><textarea id="article-input"></textarea></li>
+						<li><label for="article-input">Paste an article:</label><textarea id="article-input"></textarea></li>
 						<li><input type="submit" value="Use this content"/></li>
 					</ul>
 				</form>
@@ -37,9 +37,14 @@
             <li>
               <div id="credibility-prompts"></div>
             </li>
-            <li><h3>What should they consider when asking these questions?</h3></li>
+            <li><h3>What should they know while asking this question?</h3></li>
             <li>
-              <div id="credibility-information"></div>
+              <label for="credibility-long-information">Important context</label>
+              <textarea id="credibility-long-information"></textarea>
+            </li>
+            <li>
+              <label for="credibility-short-information">Pithy summary</label>
+              <input type="text" id="credibility-short-information">
             </li>
             <li><input type="submit" /></li>
           </ul>
@@ -47,6 +52,7 @@
       </div>
       <div id="frame-4" class="frame">
         <h2>Insert your Credibility Layer</h2>
+        <p>You're almost done!  All you ned to do now is copy and paste the code below into your article.</p>
         <div id="credibility-code"></div>
       </div>
 		</div>
