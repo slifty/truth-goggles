@@ -4,6 +4,7 @@
 		<link rel="stylesheet" type="text/css" href="augment/augment.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="<?PHP echo($BASE_DIRECTORY); ?>js/lib/randomcolor.js"></script>
+    <script>var BASE_PATH = "//<?php echo($_SERVER['HTTP_HOST'].$BASE_DIRECTORY); ?>";</script>
 		<script type="text/javascript" src="augment/augment.js"></script>
 	</head>
 	<body>
@@ -20,7 +21,7 @@
 			</div>
       <div id="frame-2" class="frame">
         <h2>When should readers be thinking more carefully?</h2>
-        <p>Click on the phrases that you want people to think about.</p>
+        <p>Highlight phrases that you want people to think about.</p>
         <div id="selectable-content"></div>
         <form id="content-selection-form">
           <ul>

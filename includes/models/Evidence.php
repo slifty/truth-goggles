@@ -126,7 +126,6 @@ class Evidence extends FactoryObject implements JSONObject {
 							VALUES (0,
 									".DBConn::clean($this->getContributionID()).",
 									".DBConn::clean($this->getFilePath()).",
-									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
 			
 			$mysqli->query($query_string) or print($mysqli->error);

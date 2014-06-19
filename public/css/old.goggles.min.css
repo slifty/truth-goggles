@@ -1,0 +1,297 @@
+.critical-element * {
+	font-family: arial;
+	color: #000000;
+	background: #FFFFFF;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	text-indent: 0px;
+	text-decoration: none;
+	font-style: normal;
+	font-size: 14px;
+	text-align: left;
+	width: auto;
+}
+
+body.critical-modal-enabled {
+	height: 100%;
+	overflow: hidden;
+}
+
+/* Phrases */
+
+/* Transparent Mode */
+.critical-transparent .critical-phrase {
+	color: #000000;
+	background: #FFFF99;
+	cursor: pointer;
+}
+.critical-transparent .critical-viewed {
+	background: #CCCCBB;
+}
+.critical-transparent .critical-antisnippet {
+}
+
+/* Goggles Mode */
+.critical-goggles .critical-phrase {
+	color: #000000;
+	background: #FFFF99;
+	cursor: pointer;
+}
+.critical-goggles .critical-viewed {
+	background: #CCCCBB;
+}
+.critical-goggles .critical-antisnippet {
+	color: transparent;
+	text-shadow: 0 0 6px rgba(0,0,0,0.5);
+}
+
+/* Safe Mode */
+.critical-safe .critical-phrase {
+	color: #000000;
+	background: #FFFF99;
+	cursor: pointer;
+	display:inline-block;
+	text-indent: -99999px;
+	border: 1px solid #880000;
+	width: 200px;
+}
+.critical-safe .critical-viewed {
+	text-indent: 0px;
+	border: none;
+	display: inline;
+	background: #CCCCBB;
+}
+.critical-safe .critical-antisnippet {
+}
+
+
+/* Modal Pane */
+.critical-phrase.critical-active {
+	color: #333333;
+	background: #FFFFFF;
+	display:block;
+	text-indent: 0px;
+	border: none;
+	z-index: 999999;
+	position: fixed;
+	border: solid 2px #336699;
+	cursor: default;
+}
+
+#critical-modal {
+	background: #000000;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	opacity:0.95;
+	z-index: 999997;
+	filter:alpha(opacity=95); /* For IE8 and earlier */
+}
+
+
+/* Side Pane */
+#critical-sidepane {
+	height: 320px;
+	width: 15px;
+	background: #FFFFFF;
+	border: solid 2px #336699;
+	border-right: none;
+	border-left: none;
+	position: fixed;
+	top: 180px;
+	right: 0px;
+	-moz-box-shadow: 3px 3px 5px #555;
+	-webkit-box-shadow: 3px 3px 5px #555;
+	box-shadow: 3px 3px 5px #555;
+	overflow: hidden;
+	font-family: arial;
+	font-size: 16px;
+	color: #333333;
+	z-index: 999999;
+}
+#critical-alert {
+	height: 20px;
+	width: 15px;
+	background: #FF3300;
+	position: fixed;
+	top: 500px;
+	right: 0px;
+	-moz-box-shadow: 3px 3px 5px #555;
+	-webkit-box-shadow: 3px 3px 5px #555;
+	box-shadow: 3px 3px 5px #555;
+	overflow: hidden;
+	font-family: arial;
+	font-size: 16px;
+	color: #333333;
+	z-index: 999999;
+}
+
+#critical-sidepane #critical-sidepane-close {
+	float: left;
+	height: 100%;
+	width: 12px;
+	background: #336699;
+	cursor: pointer;
+}
+#critical-sidepane.open #critical-sidepane-close {
+}
+
+#critical-sidepane #critical-sidepane-logo {
+	background: url('../img/small-logo.gif');
+	height: 50px;
+	width: 90px;
+	margin-bottom: 15px;
+}
+
+#critical-sidepane #critical-sidepane-main {
+	margin-left: 10px;
+	padding: 10px;
+	width: 190px;
+}
+#critical-sidepane #critical-sidepane-main h1 {
+	font-size: 16px;
+	color: #669900;
+	margin-bottom: 5px;
+	font-weight: normal;
+}
+#critical-sidepane #critical-sidepane-main #critical-mode-toggle {
+	font-style: italic;
+	font-size: 14px;
+	color: #A2C0DF;
+	cursor: pointer;
+	margin-top: 5px;
+}
+.critical-safe #critical-sidepane #critical-sidepane-main .critical-phrase {
+	text-indent: 0px;
+	width: auto;
+	padding: 0px 2px;
+}
+
+
+/* Info Pane */
+#critical-infopane {
+	width: 600px;
+	background: #FFFFFF;
+	border: solid 2px #336699;
+	border-right: none;
+	padding: 10px;
+	position: fixed;
+	top: 170px;
+	left: 50%;
+	margin-left: -300px;
+	z-index: 999998;
+}
+
+#critical-infopane #critical-infopane-logo {
+	background: url('../img/tiny-logo.png');
+	height: 24px;
+	width: 24px;
+	float:left;
+	margin-top: 12px;
+	margin-left: 10px;
+}
+
+#critical-infopane #critical-infopane-close {
+	width: 150px;
+	background: #339900;
+	color: #fff;
+	font-size: 18px;
+	font-weight: bold;
+	cursor: pointer;
+	margin-left: 50px;
+	margin-top: 20px;
+	text-align: center;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+#critical-infopane #critical-infopane-content {
+}
+#critical-infopane #critical-infopane-content h1 {
+	font-size: 24px;
+	color: #669900;
+	margin-left: 50px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	font-weight: normal;
+}
+
+#critical-infopane #critical-infopane-content ul {
+	list-style: none;
+	margin-left: 30px;
+}
+
+#critical-infopane #critical-infopane-content li .verdict-toggle {
+	float: left;
+	margin-top: 4px;
+	width: 12px;
+	height: 7px;
+	background: url('../img/context-opened.gif');
+}
+#critical-infopane #critical-infopane-content li.closed .verdict-toggle {
+	float: left;
+	width: 7px;
+	height: 12px;
+	background: url('../img/context-closed.gif');
+}
+#critical-infopane #critical-infopane-content .verdict-header {
+	margin-left: 20px;
+	margin-bottom: 3px;
+}
+
+#critical-infopane #critical-infopane-content .verdict-header img {
+	max-width: 100%;
+}
+
+
+#critical-infopane #critical-infopane-content .verdict-header ol {
+	padding-left: 20px;
+}
+#critical-infopane #critical-infopane-content .verdict-header ol li {
+	margin: 5px;
+	font-size: 12px;
+}
+
+#critical-infopane #critical-infopane-content .verdict-header .vetting-service {
+	color: #333333;
+	font-weight: bold;
+	margin-right: 5px;
+	font-size: 16px;
+}
+#critical-infopane #critical-infopane-content .verdict-header .short-reason {
+	color: #333333;
+	margin-right: 5px;
+	font-size: 16px;
+	display: block;
+	margin-bottom: 5px;
+}
+#critical-infopane #critical-infopane-content .verdict-header .truth-rating {
+	color: #CC6600;
+	font-size: 16px;
+}
+#critical-infopane #critical-infopane-content .verdict-content {
+	margin-left: 20px;
+	max-height: 200px;
+	overflow: auto;
+	padding-right: 10px;
+}
+#critical-infopane #critical-infopane-content .verdict-content .long-reason {
+	display: none;
+}
+#critical-infopane #critical-infopane-content .verdict-content .long-reason p {
+	color: #888888;
+	font-size: 14px;
+	line-height: 18px;
+	padding-bottom: 10px;
+}
+#critical-infopane #critical-infopane-content .verdict-more {
+	display: none;
+	margin-top: 5px;
+	margin-left: 20px;
+}
+#critical-infopane #critical-infopane-content .verdict-more a {
+	color: #336699;
+}

@@ -188,6 +188,58 @@ switch($version) {
 		
 		echo("Updating app version\n");
 		$mysqli->query("UPDATE appinfo set version ='14';") or print($mysqli->error);
+
+	case 14:
+		echo("Dropping old tables\n");
+		$mysqli->query("DROP TABLE tokens") or print($mysqli->error);
+		$mysqli->query("DROP TABLE arguments") or print($mysqli->error);
+		$mysqli->query("DROP TABLE claims") or print($mysqli->error);
+		$mysqli->query("DROP TABLE contexts") or print($mysqli->error);
+		$mysqli->query("DROP TABLE result_classes") or print($mysqli->error);
+		$mysqli->query("DROP TABLE snippets") or print($mysqli->error);
+		$mysqli->query("DROP TABLE verdicts") or print($mysqli->error);
+		$mysqli->query("DROP TABLE vetting_services") or print($mysqli->error);
+
+
+		echo("Creating layers table\n");
+		$mysqli->query("CREATE TABLE layers (id int auto_increment primary key,
+											date_created datetime)") or print($mysqli->error);
+
+		echo("Creating contributions table\n");
+		$mysqli->query("CREATE TABLE contributions (id int auto_increment primary key,
+											 layer_id int,
+											 date_created datetime)") or print($mysqli->error);
+
+		echo("Creating statements table\n");
+		$mysqli->query("CREATE TABLE statements (id int auto_increment primary key,
+											 contribution_id int,
+											 content text,
+											 context text,
+											 contextCode text,
+											 contentCode text,
+											 date_created datetime)") or print($mysqli->error);
+
+		echo("Creating evidence table\n");
+		$mysqli->query("CREATE TABLE evidence (id int auto_increment primary key,
+											 contribution_id int,
+											 file_path text,
+											 date_created datetime)") or print($mysqli->error);
+
+		echo("Creating arguments table\n");
+		$mysqli->query("CREATE TABLE arguments (id int auto_increment primary key,
+											 contribution_id int,
+											 summary text,
+											 content text,
+											 date_created datetime)") or print($mysqli->error);
+
+		echo("Creating questions table\n");
+		$mysqli->query("CREATE TABLE questions (id int auto_increment primary key,
+											 contribution_id int,
+											 content text,
+											 date_created datetime)") or print($mysqli->error);
+		
+		echo("Updating app version\n");
+		$mysqli->query("UPDATE appinfo set version ='15';") or print($mysqli->error);
 		
 	default:
 		echo("Finished updating the schema\n");

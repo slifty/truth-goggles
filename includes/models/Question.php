@@ -93,7 +93,7 @@ class Question extends FactoryObject implements JSONObject {
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
 			"contribution_id": '.DBConn::clean($this->getContributionID()).',
-			"content": '.$content.'
+			"content": '.DBConn::clean($this->getContent()).'
 		}';
 		return $json;
 	}
@@ -126,9 +126,7 @@ class Question extends FactoryObject implements JSONObject {
 									questions.date_created)
 							VALUES (0,
 									".DBConn::clean($this->getContributionID()).",
-									".DBConn::clean($this->getSummary()).",
 									".DBConn::clean($this->getContent()).",
-									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
 			
 			$mysqli->query($query_string) or print($mysqli->error);

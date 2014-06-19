@@ -59,7 +59,7 @@ class Argument extends FactoryObject implements JSONObject {
 							   arguments.contribution_id AS contributionID,
 							   arguments.summary AS summary,
 							   arguments.content AS content,
-							   unix_timestamp(argiments.date_created) as dateCreated
+							   unix_timestamp(arguments.date_created) as dateCreated
 						  FROM arguments
 						 WHERE arguments.id IN (".$objectString.")";
 		if($length != FactoryObject::LIMIT_ALL) {
@@ -99,8 +99,8 @@ class Argument extends FactoryObject implements JSONObject {
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
 			"contribution_id": '.DBConn::clean($this->getContributionID()).',
-			"summary": '.$summary.',
-			"content": '.$content.'
+			"summary": '.DBConn::clean($this->getSummary()).',
+			"content": '.DBConn::clean($this->getContent()).'
 		}';
 		return $json;
 	}
@@ -137,7 +137,6 @@ class Argument extends FactoryObject implements JSONObject {
 									".DBConn::clean($this->getContributionID()).",
 									".DBConn::clean($this->getSummary()).",
 									".DBConn::clean($this->getContent()).",
-									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
 			
 			$mysqli->query($query_string) or print($mysqli->error);

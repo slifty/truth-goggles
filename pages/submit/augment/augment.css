@@ -41,11 +41,13 @@ form ul li label.checkbox {
 	height: 400px;
 }
 
+#selectable-content {
+}
 #selectable-content p {
 	
 }
 #selectable-content p span.sentence {
-	cursor: pointer;
+	cursor: url(../../img/highlight.cur) 0 0, pointer;
 }
 #selectable-content p span.sentence.selected {
 	background: #bfffff;

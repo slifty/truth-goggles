@@ -8,7 +8,6 @@ require_once(__DIR__."/Argument.php");
 require_once(__DIR__."/Question.php");
 require_once(__DIR__."/Statement.php");
 require_once(__DIR__."/Evidence.php");
-require_once(__DIR__."/Vardict.php");
 
 class Contribution extends FactoryObject implements JSONObject {
 	
@@ -113,7 +112,7 @@ class Contribution extends FactoryObject implements JSONObject {
 		$questionsJSON = "[".implode(",",$questionsJSONArray)."]";
 
 		$argumentsJSONArray = array();
-		foreach($argumentsJSONArray as $object)
+		foreach($arguments as $object)
 			$argumentsJSONArray[] = $object->toJSON();
 		$argumentsJSON = "[".implode(",",$argumentsJSONArray)."]";
 		
@@ -154,7 +153,6 @@ class Contribution extends FactoryObject implements JSONObject {
 									contributions.date_created)
 							VALUES (0,
 									".DBConn::clean($this->getLayerID()).",
-									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
 			
 			$mysqli->query($query_string) or print($mysqli->error);
@@ -211,7 +209,7 @@ class Contribution extends FactoryObject implements JSONObject {
 						  FROM questions
 						 WHERE questions.contribution_id = ".DBConn::clean($this->getItemID());
 		
-		return $this->questions = Questions::getObjects($query_string);
+		return $this->questions = Question::getObjects($query_string);
 	}
 	
 	public function getArguments() {
@@ -222,7 +220,7 @@ class Contribution extends FactoryObject implements JSONObject {
 						  FROM arguments
 						 WHERE arguments.contribution_id = ".DBConn::clean($this->getItemID());
 		
-		return $this->arguments = Arguments::getObjects($query_string);
+		return $this->arguments = Argument::getObjects($query_string);
 	}
 	
 	

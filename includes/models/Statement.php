@@ -56,13 +56,13 @@ class Statement extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$query_string = "SELECT statement.id AS itemID,
-							   statement.contribution_id AS contributionID,
-							   statement.content AS content,
-							   statement.context AS context,
-							   unix_timestamp(statement.date_created) as dateCreated
-						  FROM statement
-						 WHERE statement.id IN (".$objectString.")";
+		$query_string = "SELECT statements.id AS itemID,
+							   statements.contribution_id AS contributionID,
+							   statements.content AS content,
+							   statements.context AS context,
+							   unix_timestamp(statements.date_created) as dateCreated
+						  FROM statements
+						 WHERE statements.id IN (".$objectString.")";
 		if($length != FactoryObject::LIMIT_ALL) {
 			$query_string .= "
 						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
@@ -100,8 +100,8 @@ class Statement extends FactoryObject implements JSONObject {
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
 			"contribution_id": '.DBConn::clean($this->getContributionID()).',
-			"content": '.$content.',
-			"context": '.$context.'
+			"content": '.DBConn::clean($this->getContent()).',
+			"context": '.DBConn::clean($this->getContext()).'
 		}';
 		return $json;
 	}
@@ -119,27 +119,25 @@ class Statement extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$query_string = "UPDATE statement
-							   SET statement.contribution_id = ".DBConn::clean($this->getContributionID()).",
-							       statement.content = ".DBConn::clean($this->getContent()).",
-							       statement.context = ".DBConn::clean($this->getContext())."
-							 WHERE statement.id = ".DBConn::clean($this->getItemID());
+			$query_string = "UPDATE statements
+							   SET statements.contribution_id = ".DBConn::clean($this->getContributionID()).",
+							       statements.content = ".DBConn::clean($this->getContent()).",
+							       statements.context = ".DBConn::clean($this->getContext())."
+							 WHERE statements.id = ".DBConn::clean($this->getItemID());
 							
 			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$query_string = "INSERT INTO statement
-								   (statement.id,
-									statement.contribution_id,
-									statement.content,
-									statement.context,
-									statement.date_created)
+			$query_string = "INSERT INTO statements
+								   (statements.id,
+									statements.contribution_id,
+									statements.content,
+									statements.context,
+									statements.date_created)
 							VALUES (0,
 									".DBConn::clean($this->getContributionID()).",
-									".DBConn::clean($this->getSummary()).",
 									".DBConn::clean($this->getContent()).",
 									".DBConn::clean($this->getContext()).",
-									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
 			
 			$mysqli->query($query_string) or print($mysqli->error);
@@ -155,8 +153,8 @@ class Statement extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$query_string = "DELETE FROM statement
-							  WHERE statement.id = ".DBConn::clean($this->getItemID());
+		$query_string = "DELETE FROM statements
+							  WHERE statements.id = ".DBConn::clean($this->getItemID());
 		$mysqli->query($query_string);
 	}
 	
@@ -168,7 +166,7 @@ class Statement extends FactoryObject implements JSONObject {
 
 	public function getContext() { return $this->context; }
 
-	public function getDateCreated() { return $this->dateCreated; 
+	public function getDateCreated() { return $this->dateCreated; }
 
 
 	# Setters

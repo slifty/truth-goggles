@@ -1,8 +1,10 @@
 $(function() {
+	var BASE = (typeof BASE_PATH == "undefined")?"":BASE_PATH;
+
 	var processed_sentences = [];
 	var used_sentences = [];
 	var current_sentence = 0;
-	var credibility_content = [];
+	var contributions = [];
 
 	var layer_id = 0;
 
@@ -125,6 +127,7 @@ $(function() {
 			for(var y in questions) {
 				var question = questions[y];
 				var $question = $("<option>")
+					.attr("id","credibility-question")
 					.attr("value", question)
 					.text(question)
 					.appendTo($select_prompt)
@@ -134,7 +137,12 @@ $(function() {
 
 	// Save this single claim
 	function saveClaim(sentence_number) {
-		var sentence = processed_sentences[used_sentences[sentence_number]];
+		var index = used_sentences[sentence_number];
+		var prev_sentence = (index > 0)?processed_sentences[index - 1]:"";
+		var sentence = processed_sentences[index];
+		var next_sentence = (index < processed_sentences.length - 2)?processed_sentences[index + 1]:"";
+		var context = prev_sentence + sentence + next_sentence;
+		var question = $("#credibility-question").val();
 		var long_explanation = $("#credibility-long-information").val();
 		var short_explanation = $("#credibility-short-information").val();
 		$("#credibility-short-information").val("");
@@ -142,21 +150,34 @@ $(function() {
 
 		var content = {
 			"claim": sentence,
-			"long": long_explanation,
-			"short": short_explanation
+			"context": context,
+			"question": question,
+			"argument": long_explanation,
+			"summary": short_explanation
 		};
 
-		credibility_content.push(content);
+		contributions.push(content);
 	}
 
 	// Save the entire layer
 	function saveLayer() {
+
+		var data = {
+			"layer": {
+				"contributions": contributions
+			}
+		};
+
 		$.ajax({
 			"type": "post",
-			"data": credibility_content
+			"data": data,
+			"url": "../api/layers",
+			"dataType": "json"
 		}).done(function(data) {
-			layer_id = data.layer_id;
-		})
+			layer_id = data.id;
+			var script = '<script src="' + BASE + 'js/goggles.js"></script><script>truthGoggles({server: "' + BASE + '",layerId: ' + layer_id + '});</script>';
+			$("#credibility-code").text(script);
+		});
 	}
 
 
@@ -198,10 +219,6 @@ $(function() {
 	})
 
 	// Start the experience
-	loadContent(
-		[["This is a test.",
-		  "It has a few sentences!"],
-		 ["But also a few paragraphs."]]);
-	switchFrame(2);
+	switchFrame(1);
 
 });

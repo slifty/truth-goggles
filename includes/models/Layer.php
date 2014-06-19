@@ -48,7 +48,7 @@ class Layer extends FactoryObject implements JSONObject {
 		// Load the object data
 		$query_string = "SELECT layers.id AS itemID,
 							   unix_timestamp(layers.date_created) as dateCreated
-						  FROM claims
+						  FROM layers
 						 WHERE layers.id IN (".$objectString.")";
 		if($length != FactoryObject::LIMIT_ALL) {
 			$query_string .= "
@@ -109,7 +109,6 @@ class Layer extends FactoryObject implements JSONObject {
 								   (layers.id,
 									layers.date_created)
 							VALUES (0,
-									FROM_UNIXTIME(".DBConn::clean($this->getDateRecorded())."),
 									NOW())";
 			
 			$mysqli->query($query_string) or print($mysqli->error);
