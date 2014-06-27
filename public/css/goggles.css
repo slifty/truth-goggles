@@ -11,9 +11,11 @@
 }
 
 .gogglesModal {
-	position: absolute;
+	position: fixed;
 	left: 0px;
 	right: 0px;
+	top: 0px;
+	bottom: 0px;
 	z-index: 999998;
 	background: #ffffff;
 	margin-right: auto;
@@ -21,13 +23,14 @@
 	margin-top: auto;
 	margin-bottom: auto;
 	width: 90%;
-	max-height: 90%;
+	height: 90%;
+	max-height: 500px;
 	max-width: 600px;
 	border: 4px solid #336699;
+	overflow: auto;
 }
 .gogglesModalClose {
 	text-align: center;
-	height: 20px;
 	color: #fff;
 	background: #339900;
 	font-size: 20px;

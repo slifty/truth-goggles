@@ -95,7 +95,6 @@ function loadGogglesPlugin(jQuery, queuedCall) {
                     var contextMatch;
                     while ((contextMatch = contextRegEx.exec(text)) !== null) {
                         var contentMatch = contentRegEx.exec(contextMatch[0]);
-                        console.log(contextMatch);
                         var target = [contentMatch.index + contextMatch.index, contentMatch[0].length];
                         targets.push(target);
                     }

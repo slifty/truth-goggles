@@ -1,5 +1,10 @@
 body {
 	font-family: 'PT Sans', sans-serif;
+	background: #336699;
+}
+
+h1 {
+	text-align: center;
 }
 
 form ul {
@@ -26,29 +31,193 @@ form ul li label.checkbox {
 	cursor: pointer;
 }
 
-#content {
-	margin: 40px;
+.button {
+	text-align: center;
+	color: #fff;
+	background: #339900;
+	font-size: 20px;
+	font-weight: bold;
+	cursor: pointer;
+	margin: 20px;
+	padding: 10px;
+	font-family: arial;
+	border: none;
+	display: block;
+}
+
+#frames {
+	background: #fff;
+	margin: 40px auto;
 	padding: 40px;
 	border: 2px solid black;	
+	max-width: 900px;
 }
 
+#logo {
+	background: url("../../img/logo.jpg");
+	height: 140px;
+	width: 270px;
+	margin: 0px auto;
+}
 
-#url-input {
+#contentText-form label, #contentUrl-form label, #contentSelection-form label {
+	display: block;
+	font-weight: bold;
+	margin-left: 20px;
+	cursor: pointer;
+}
+
+#contentText {
+	width: 500px;
+	height: 300px;
+	margin-left: 20px;
+}
+#contentUrl {
 	width: 250px;
+	margin-left: 20px;
 }
-#article-input {
+
+
+#articlenput {
 	width: 500px;
 	height: 400px;
 }
 
-#selectable-content {
-}
-#selectable-content p {
-	
-}
-#selectable-content p span.sentence {
+#content {
 	cursor: url(../../img/highlight.cur) 0 0, pointer;
+	border: 2px solid black;
+	padding: 20px;
+	height: 500px;
+	overflow: auto;
+	margin: 20px;
 }
-#selectable-content p span.sentence.selected {
-	background: #bfffff;
+#content p span.word.selected {
+	background: #ffff99;
+	cursor: pointer;
+}
+#content p span.word.highlighted {
+	background: #ffddaa;
+}
+
+#promptBackground {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	z-index: 100;
+	background: rgba(150,150,150,.6);
+}
+
+#prompt {
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	z-index: 999998;
+	background: #ffffff;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+	height: 90%;
+	width: 90%;
+	max-height: 550px;
+	max-width: 500px;
+	border: 4px solid #336699;
+	overflow: auto;
+}
+
+#prompt h3 {
+	margin: 0px 20px;
+	font-family: arial;
+	font-size: 16px;
+}
+
+#prompt label {
+	display: block;
+	margin-left: 40px;
+	margin-top: 20px;
+}
+#prompt input {
+	margin-left: 40px;
+}
+#prompt textarea {
+	margin-left: 40px;
+	display: block;
+}
+
+#prompt #promptSentence {
+	margin: 20px;
+	padding-bottom: 20px;
+	font-size: 20px;
+	text-align: center;
+	border-bottom: 2px solid #336699;
+	font-family: arial;
+}
+
+#prompt #promptQuestionSelect {
+	margin-top: 10px;
+	margin-left: 40px;
+	display: block;
+}
+#prompt #promptQuestionText {
+	margin-top: 10px;
+	margin-left: 40px;
+	width: 300px;
+}
+
+#prompt h3#promptAnswerTitle {
+	margin-top: 30px;
+}
+
+#prompt #promptShortAnswer {
+	width: 400px;
+}
+
+#prompt #promptLongAnswer {
+	width: 400px;
+	height: 150px;
+}
+
+#prompt #promptSave {
+	float: left;
+	margin-left: 40px;
+	height: 40px;
+	width: 120px;
+}
+#prompt #promptCancel {
+	float: left;
+	background: #666666;
+	padding: 5px 0px;
+	margin: 25px 10px;
+	height: 30px;
+	width: 100px;
+	font-weight: normal;
+}
+#prompt #promptDelete {
+	background: #996666;
+	padding: 5px 0px;
+	margin: 25px 10px;
+	height: 30px;
+	width: 100px;
+	float: left;
+	font-weight: normal;
+}
+
+#layerCode {
+	border: 2px solid #555;
+	background: #eee;
+	color: #888;
+	padding: 20px;
+}
+
+#layerUrl a {
+	text-align: center;
+}
+#layerUrl a {
+	color: #CC6600;
+	text-decoration: none;
+	font-size: 24px;
 }

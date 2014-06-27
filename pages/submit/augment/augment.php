@@ -8,53 +8,40 @@
 		<script type="text/javascript" src="augment/augment.js"></script>
 	</head>
 	<body>
-		<div id="content">
-			<h1>Truth Goggles: Create a Credibility Layer</h1>
+		<div id="frames">
+      <div id="logo"></div>
+			<h1>Create a Credibility Layer</h1>
 			<div id="frame-1" class="frame">
-				<h2>What do you want to create a layer for?</h2>
-				<form id="content-load-form">
-					<ul>
-						<li><label for="article-input">Paste an article:</label><textarea id="article-input"></textarea></li>
-						<li><input type="submit" value="Use this content"/></li>
-					</ul>
+        <h2>Use a web site...</h2>
+        <form id="contentUrl-form">
+          <label for="contentUrl">Enter a URL:</label><input type="text" id="contentUrl"/>
+          <input type="submit" class="button" value="Load this"/>
+        </form>
+        <hr />
+        <h2>Or use an article's text...</h2>
+				<form id="contentText-form">
+					<label for="contentText">Paste an article:</label>
+          <textarea id="contentText"></textarea>
+					<input type="submit" class="button" value="Use this"/>
 				</form>
+        
 			</div>
       <div id="frame-2" class="frame">
-        <h2>When should readers be thinking more carefully?</h2>
-        <p>Highlight phrases that you want people to think about.</p>
-        <div id="selectable-content"></div>
-        <form id="content-selection-form">
-          <ul>
-            <li><input type="submit" /></li>
-          </ul>
+        <h2>Where should readers be thinking more carefully?</h2>
+        <form id="contentSelection-form">
+          <label>Highlight phrases you want people to think about.</label>
+          <div id="content"></div></li>
+          <input type="submit" class="button" value="Publish"/>
         </form>
       </div>
       <div id="frame-3" class="frame">
-        <h2>Now help people think.</h2>
-        <div id="credibility-sentence"></div>
-        <form id="credibility-definition-form">
-          <ul>
-            <li><h3>What should your readers ask themselves when they see this?</h3></li>
-            <li>
-              <div id="credibility-prompts"></div>
-            </li>
-            <li><h3>What should they know while asking this question?</h3></li>
-            <li>
-              <label for="credibility-long-information">Important context</label>
-              <textarea id="credibility-long-information"></textarea>
-            </li>
-            <li>
-              <label for="credibility-short-information">Pithy summary</label>
-              <input type="text" id="credibility-short-information">
-            </li>
-            <li><input type="submit" /></li>
-          </ul>
-        </form>
-      </div>
-      <div id="frame-4" class="frame">
-        <h2>Insert your Credibility Layer</h2>
-        <p>You're almost done!  All you ned to do now is copy and paste the code below into your article.</p>
-        <div id="credibility-code"></div>
+        <h2>Share your layer...</h2>
+        <p>Give this link to your friends to help them think more carefully about this article.  When they click your link, they will see the original story with your layer on top of it.</p>
+        <div id="layerUrl"></div>
+        <hr />
+        <h2>Or embed it in your article...</h2>
+        <p>If you wrote this article you can embed your layer directly, so everyone is able to see it. Just copy the code below and paste it just like it was an embeddable video.</p>
+        <div id="layerCode"></div>
       </div>
 		</div>
 	</body>
