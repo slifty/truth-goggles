@@ -4,7 +4,7 @@ require_once(__DIR__."/DBConn.php");
 require_once(__DIR__."/FactoryObject.php");
 require_once(__DIR__."/JSONObject.php");
 
-class Statement extends FactoryObject implements JSONObject {
+class Argument extends FactoryObject implements JSONObject {
 	
 	# Constants
 	
@@ -14,13 +14,12 @@ class Statement extends FactoryObject implements JSONObject {
 	
 	# Instance Variables
 	private $contributionID;// int
+	private $summary; 		// string
 	private $content; 		// string
-	private $context; 		// string
 	private $dateCreated; 	// timestamp
 	
 	
 	# Caches
-	private $paraphrases;
 	private $contribution;
 	
 	
@@ -33,8 +32,8 @@ class Statement extends FactoryObject implements JSONObject {
 			$data_array = array();
 			$data_array['itemID'] = 0;
 			$data_array['contributionID'] = 0;
+			$data_array['summary'] = "";
 			$data_array['content'] = "";
-			$data_array['context'] = "";
 			$data_array['dateCreated'] = 0;
 			$data_arrays[] = $data_array;
 			return $data_arrays;
@@ -45,8 +44,8 @@ class Statement extends FactoryObject implements JSONObject {
 			$data_array = array();
 			$data_array['itemID'] = 0;
 			$data_array['contributionID'] = 0;
+			$data_array['summary'] = "";
 			$data_array['content'] = "";
-			$data_array['context'] = "";
 			$data_array['dateCreated'] = 0;
 			$data_arrays[] = $data_array;
 			return $data_arrays;
@@ -56,13 +55,13 @@ class Statement extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Load the object data
-		$query_string = "SELECT statements.id AS itemID,
-							   statements.contribution_id AS contributionID,
-							   statements.content AS content,
-							   statements.context AS context,
-							   unix_timestamp(statements.date_created) as dateCreated
-						  FROM statements
-						 WHERE statements.id IN (".$objectString.")";
+		$query_string = "SELECT arguments.id AS itemID,
+							   arguments.contribution_id AS contributionID,
+							   arguments.summary AS summary,
+							   arguments.content AS content,
+							   unix_timestamp(arguments.date_created) as dateCreated
+						  FROM arguments
+						 WHERE arguments.id IN (".$objectString.")";
 		if($length != FactoryObject::LIMIT_ALL) {
 			$query_string .= "
 						 LIMIT ".DBConn::clean($start).",".DBConn::clean($length);
@@ -75,8 +74,8 @@ class Statement extends FactoryObject implements JSONObject {
 			$data_array = array();
 			$data_array['itemID'] = $resultArray['itemID'];
 			$data_array['contributionID'] = $resultArray['contributionID'];
+			$data_array['summary'] = $resultArray['summary'];
 			$data_array['content'] = $resultArray['content'];
-			$data_array['context'] = $resultArray['context'];
 			$data_array['dateCreated'] = $resultArray['dateCreated'];
 			$data_arrays[] = $data_array;
 		}
@@ -88,8 +87,8 @@ class Statement extends FactoryObject implements JSONObject {
 	public function load($data_array) {
 		parent::load($data_array);
 		$this->contributionID = isset($data_array["contributionID"])?$data_array["contributionID"]:0;
+		$this->summary = isset($data_array["summary"])?$data_array["summary"]:"";
 		$this->content = isset($data_array["content"])?$data_array["content"]:"";
-		$this->context = isset($data_array["context"])?$data_array["context"]:"";
 		$this->dateCreated = isset($data_array["dateCreated"])?$data_array["dateCreated"]:0;
 	}
 	
@@ -100,8 +99,8 @@ class Statement extends FactoryObject implements JSONObject {
 		$json = '{
 			"id": '.DBConn::clean($this->getItemID()).',
 			"contribution_id": '.DBConn::clean($this->getContributionID()).',
-			"content": '.DBConn::clean($this->getContent()).',
-			"context": '.DBConn::clean($this->getContext()).'
+			"summary": '.DBConn::clean($this->getSummary()).',
+			"content": '.DBConn::clean($this->getContent()).'
 		}';
 		return $json;
 	}
@@ -119,25 +118,25 @@ class Statement extends FactoryObject implements JSONObject {
 		
 		if($this->isUpdate()) {
 			// Update an existing record
-			$query_string = "UPDATE statements
-							   SET statements.contribution_id = ".DBConn::clean($this->getContributionID()).",
-							       statements.content = ".DBConn::clean($this->getContent()).",
-							       statements.context = ".DBConn::clean($this->getContext())."
-							 WHERE statements.id = ".DBConn::clean($this->getItemID());
+			$query_string = "UPDATE arguments
+							   SET arguments.contribution_id = ".DBConn::clean($this->getContributionID()).",
+							       arguments.summary = ".DBConn::clean($this->getSummary()).",
+							       arguments.content = ".DBConn::clean($this->getContent())."
+							 WHERE arguments.id = ".DBConn::clean($this->getItemID());
 							
 			$mysqli->query($query_string) or print($mysqli->error);
 		} else {
 			// Create a new record
-			$query_string = "INSERT INTO statements
-								   (statements.id,
-									statements.contribution_id,
-									statements.content,
-									statements.context,
-									statements.date_created)
+			$query_string = "INSERT INTO arguments
+								   (arguments.id,
+									arguments.contribution_id,
+									arguments.summary,
+									arguments.content,
+									arguments.date_created)
 							VALUES (0,
 									".DBConn::clean($this->getContributionID()).",
+									".DBConn::clean($this->getSummary()).",
 									".DBConn::clean($this->getContent()).",
-									".DBConn::clean($this->getContext()).",
 									NOW())";
 			
 			$mysqli->query($query_string) or print($mysqli->error);
@@ -153,8 +152,8 @@ class Statement extends FactoryObject implements JSONObject {
 		$mysqli = DBConn::connect();
 		
 		// Delete this record
-		$query_string = "DELETE FROM statements
-							  WHERE statements.id = ".DBConn::clean($this->getItemID());
+		$query_string = "DELETE FROM arguments
+							  WHERE arguments.id = ".DBConn::clean($this->getItemID());
 		$mysqli->query($query_string);
 	}
 	
@@ -162,19 +161,19 @@ class Statement extends FactoryObject implements JSONObject {
 	# Getters
 	public function getContributionID() { return $this->contributionID; }
 
+	public function getSummary() { return $this->summary; }
+
 	public function getContent() { return $this->content; }
 
-	public function getContext() { return $this->context; }
-
 	public function getDateCreated() { return $this->dateCreated; }
-
+	
 
 	# Setters
 	public function setContributionID($int) { $this->contributionID = $int; }
 
-	public function setContent($str) { $this->content = $str; }
+	public function setSummary($str) { $this->summary = $str; }
 
-	public function setContext($str) { $this->context = $str; }
+	public function setContent($str) { $this->content = $str; }
 
 }
 

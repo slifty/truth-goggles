@@ -1,11 +1,4 @@
 <?php
-###
-# Info:
-#  Last Updated 2011
-#  Daniel Schultz
-#
-# Comments:
-###
 class DBConn {
 	
 	# Constants
