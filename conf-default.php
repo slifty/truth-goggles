@@ -15,7 +15,7 @@
 	$MYSQL_DB = "";
 
 // Memcache Connection Settings
-	global $MEMCACHE_HOST, $MEMCACHE_PORT
+	global $MEMCACHE_HOST, $MEMCACHE_PORT;
 	$MEMCACHE_HOST = "";
 	$MEMCACHE_PORT = 11211;
 
@@ -30,5 +30,17 @@
 // Thermonuclear Disaster Prevention
 	global $ALLOW_THERMONUCLEAR_DISASTER;
 	$ALLOW_THERMONUCLEAR_DISASTER = false;
+
+// Include everything
+include_once("includes/models/Argument.php");
+include_once("includes/models/Contribution.php");
+require_once("includes/models/DBConn.php");
+require_once("includes/models/Evidence.php");
+require_once("includes/models/Layer.php");
+require_once("includes/models/Question.php");
+require_once("includes/models/Statement.php");
+require_once("includes/lib/readability.php");
+require_once("includes/engine/helpers/helpers.php");
+
 	
 ?>
