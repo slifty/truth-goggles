@@ -77,7 +77,23 @@
 		// CSS Link Fixes
 		$html = preg_replace('/\<link(.*?)text\/css(.*?)src\=(.*?)\/\>/i', "<link\\1text/css\\2href=\\3/>", $html);
 	} elseif ($_REQUEST['text']) {
-		$html = "<html><head></head><body>".str_replace("\n","<br />",$_REQUEST['text'])."</body></html>";
+		$html = "
+		<html>
+			<head>
+				<title>Truth Goggles Credibility Layer</title>
+    			<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+				<link rel='stylesheet' type='text/css' href='".$BASE_DIRECTORY."css/published.css'>
+			</head>
+			<body>
+				<div id='header'>
+					<div id='logo'></div>
+					<p>The content below was annotated using <a href='/'>truth goggles</a></p>
+				</div>
+				<div id='content'>
+					".str_replace("\n","<br />",$_REQUEST['text'])."
+				</div>
+			</body>
+		</html>";
 	}
 	$script = "
 	

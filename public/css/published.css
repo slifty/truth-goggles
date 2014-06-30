@@ -1,0 +1,33 @@
+body {
+	background: #336699;
+	font-family: 'PT Sans', sans-serif;
+}
+
+#content {
+	background: #fff;
+	margin: 40px auto;
+	padding: 40px;
+	border: 2px solid black;	
+	max-width: 900px;
+}
+
+a {
+	color: #CC6600;
+	text-decoration: none;
+}
+
+#header {
+	background: #fff;
+	margin: 40px auto;
+	padding: 20px;
+	border: 2px solid black;	
+	width: 400px;
+	text-align: center;
+}
+
+#logo {
+	background: url("../img/logo.jpg");
+	height: 140px;
+	width: 270px;
+	margin: 0px auto;
+}
