@@ -5,6 +5,15 @@ body {
 
 h1 {
 	text-align: center;
+	margin: 0px;
+}
+
+h2 {
+
+}
+
+h1, h2, h3 {
+	font-family: 'Indie Flower', sans-serif;
 }
 
 form ul {
@@ -25,6 +34,7 @@ form ul li label.checkbox {
 
 .frame {
 	display: none;
+	position: relative;
 }
 
 .question_type h4 {
@@ -45,6 +55,14 @@ form ul li label.checkbox {
 	display: block;
 }
 
+#header {
+	background: #fff;
+	margin: 40px auto;
+	padding: 20px;
+	border: 2px solid black;	
+	width: 400px;
+}
+
 #frames {
 	background: #fff;
 	margin: 40px auto;
@@ -60,27 +78,21 @@ form ul li label.checkbox {
 	margin: 0px auto;
 }
 
-#contentText-form label, #contentUrl-form label, #contentSelection-form label {
+#frame-1 #contentText-form label, #contentUrl-form label, #contentSelection-form label {
 	display: block;
 	font-weight: bold;
 	margin-left: 20px;
 	cursor: pointer;
 }
 
-#contentText {
-	width: 500px;
+#frame-1 #contentText {
+	width: 90%;
 	height: 300px;
 	margin-left: 20px;
 }
-#contentUrl {
-	width: 250px;
+#frame-1 #contentUrl {
+	width: 90%;
 	margin-left: 20px;
-}
-
-
-#articlenput {
-	width: 500px;
-	height: 400px;
 }
 
 #content {
@@ -160,6 +172,7 @@ form ul li label.checkbox {
 #prompt #promptQuestionSelect {
 	margin-top: 10px;
 	margin-left: 40px;
+	width: 300px;
 	display: block;
 }
 #prompt #promptQuestionText {

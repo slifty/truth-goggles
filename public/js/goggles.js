@@ -137,7 +137,7 @@ function loadGogglesPlugin(jQuery, queuedCall) {
                     var statement = contribution.statements[x];
                     var $statement = $("<div>")
                         .addClass("gogglesStatement")
-                        .text('"' + statement.content + '"')
+                        .text('"' + statement.content.replace(/^[“”"’']|[“”"’']$/g,"").trim() + '"')
                         .appendTo($contribution);
                 }
 
@@ -159,11 +159,16 @@ function loadGogglesPlugin(jQuery, queuedCall) {
                     var $summary = $("<div>")
                         .addClass("gogglesArgumentSummary")
                         .html(argument.summary)
-                        .appendTo($argument);
+                        .appendTo($argument)
+                        .click(function() {
+                            $(this).parent().find(".gogglesArgumentContent")
+                                .slideToggle(100);
+                        })
                         
                     var $content = $("<div>")
                         .addClass("gogglesArgumentContent")
                         .html(argument.content)
+                        .hide()
                         .appendTo($argument);
                 }
 

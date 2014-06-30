@@ -30,6 +30,8 @@ $(function() {
 		var $frame = $("#frame-" + id);
 		$(".frame").hide();
 		$frame.show();
+		ga('send', 'event', 'annotation', 'changeFrame', id);
+		console.log(id)
 	}
 
 
@@ -226,7 +228,7 @@ $(function() {
 		}
 		$promptAnswerTitle = $("<h3>")
 			.attr("id", "promptAnswerTitle")
-			.text("What should they know while asking this question?")
+			.text("Do you have any answers?")
 			.appendTo($prompt);
 
 		$promptShortAnswerLabel = $("<label>")
@@ -289,6 +291,8 @@ $(function() {
 
 		$background.fadeIn();
 		$prompt.fadeIn();
+
+		ga('send', 'event', 'annotation', 'layerAction', 'create');
 	}
 
 	function deleteContribution(id) {
@@ -297,6 +301,7 @@ $(function() {
 			.removeClass("selected")
 			.data("contribution_id", "")
 			.removeClass("contribution-" + id);
+		ga('send', 'event', 'annotation', 'layerAction', 'delete');
 	}
 
 	function cancelContribution(start, end) {
@@ -308,6 +313,7 @@ $(function() {
 			if(contribution_id === "")
 				$word.removeClass("selected")
 		}
+		ga('send', 'event', 'annotation', 'layerAction', 'cancel');
 	}
 
 	function saveContribution(start, end) {
@@ -345,6 +351,7 @@ $(function() {
 		} else {
 			contributions[contribution_id] = contribution;
 		}
+		ga('send', 'event', 'annotation', 'layerAction', 'save');
 	}
 
 	function getContributionId(word) {

@@ -37,6 +37,7 @@
 	font-weight: bold;
 	cursor: pointer;
 	margin: 20px;
+	margin-left: 55px;
 	width: 120px;
 	padding: 10px 0px;
 	font-family: arial;
@@ -47,8 +48,9 @@
 	padding-bottom: 20px;
 	font-size: 20px;
 	text-align: center;
-	border-bottom: 2px solid #336699;
+	border-bottom: 2px solid #eee;
 	font-family: arial;
+	color: #666;
 }
 .gogglesQuestion {
 	margin: 0px 20px;
@@ -70,15 +72,19 @@
 	font-family: arial;
 }
 .gogglesArgumentSummary {
-	font-weight: bold;
+	font-weight: normal;
 	font-family: arial;
+	text-align: left;
+	cursor: pointer;
 }
 .gogglesArgumentContent {
 	font-family: arial;
 	padding-left: 10px;
 	margin: 5px;
 	padding: 5px;
-	border-left: 3px solid #ccc;
+	border-left: 2px solid #ccc;
+	text-align: left;
+	margin-left: 20px;
 }
 
 .gogglesTarget {
