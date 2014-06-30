@@ -430,6 +430,9 @@ $(function() {
 			loadContent(content)
 			switchFrame(2);
 		})
+		.fail(function() {
+			alert("Sorry, we couldn't extract the content from that page.  Please copy and paste the text manually.")
+		})
 		return false;
 	});
 
