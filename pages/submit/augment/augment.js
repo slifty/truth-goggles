@@ -10,6 +10,7 @@ $(function() {
 	var next_contribution_id = 0; // The temporary local ID of the next contribution
 
 	var questions = [
+	  "Are you sure that's true?",
 	  "Who is saying this?",
 	  "Who else is involved?",
 	  "Who benefits from this?",
@@ -380,7 +381,7 @@ $(function() {
 		}).done(function(data) {
 			layer_id = data.layer.id;
 			url = data.url;
-			var script = '<script src="' + BASE + 'js/goggles.js"></script><script>truthGoggles({server: "' + BASE + '",layerId: ' + layer_id + '});</script>';
+			var script = '<script src="' + BASE + '/js/goggles.js"></script><script>truthGoggles({server: "' + BASE + '",layerId: ' + layer_id + '});</script>';
 			$("#layerCode").text(script);
 			$("#layerUrl").html("<a href='//" + window.location.host + url + "'>http://" + window.location.host + url + "</a>");
 			console.log(data);
