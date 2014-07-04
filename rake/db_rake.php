@@ -240,7 +240,75 @@ switch($version) {
 		
 		echo("Updating app version\n");
 		$mysqli->query("UPDATE appinfo set version ='15';") or print($mysqli->error);
+
+
+	case 15:
+		echo("Creating study_participant table\n");
+		$mysqli->query("CREATE TABLE study_participant (id int auto_increment primary key,
+											treatment_code text,
+											ideology text,
+											age text,
+											gender text,
+											education text,
+											ethnicity text,
+											income text,
+											date_created datetime)") or print($mysqli->error);
+
+		echo("Creating study_survey table\n");
+		$mysqli->query("CREATE TABLE study_survey (id int auto_increment primary key,
+											participant_id int,
+											treatment_id int,
+											story_believable text,
+											story_thorough text,
+											story_accurate text,
+											story_factual text,
+											story_biased text,
+											story_interesting text,
+											story_informative text,
+											story_important text,
+											story_serious text,
+											story_good text,
+											story_positive text,
+											story_quality text,
+											journalist_believable text,
+											journalist_thorough text,
+											journalist_accurate text,
+											journalist_factual text,
+											journalist_biased text,
+											journalist_good text,
+											journalist_professional text,
+											journalist_careless text,
+											article_positive_2 text,
+											article_positive_pct text,
+											article_lean text,
+											feel_angry text,
+											feel_irritated text,
+											feel_aggravated text,
+											feel_mad text,
+											feel_fearful text,
+											feel_afraid text,
+											feel_scared text,
+											feel_upset text,
+											feel_elated text,
+											feel_happy text,
+											feel_joyful text,
+											feel_cheerful text,
+											feel_sad text,
+											feel_dreary text,
+											feel_dismal text,
+											recall text,
+											feedback text,
+											date_created datetime)") or print($mysqli->error);
+		echo("Creating study_event table\n");
+		$mysqli->query("CREATE TABLE study_event (id int auto_increment primary key,
+											participant_id int,
+											type text,
+											contribution_id int,
+											date_created datetime)") or print($mysqli->error);
 		
+		echo("Updating app version\n");
+		$mysqli->query("UPDATE appinfo set version ='14';") or print($mysqli->error);
+
 	default:
 		echo("Finished updating the schema\n");
 }

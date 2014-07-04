@@ -5,7 +5,7 @@
 	<head></head>
 	<body>
 		<form action="next" method="POST">
-			<input type="hidden" name="treatment" value="<?php echo($_SESSION['previous']);?>">
+			<input type="hidden" name="treatment-id" value="<?php echo($_SESSION['previous']);?>">
 			<ul>
 				<li><p>Please rate the story you just read on the following:</p></li>
 				<li>
@@ -413,13 +413,13 @@
 				<li><p>What would you say is the structure of the story you just read (select one)?</p></li>
 				<li>
 					<ul>
-						<li><radio name="recall" id="recall-1" value="1"><label for="recall-1">Story with clickable links to information</label></li>
-						<li><radio name="recall" id="recall-2" value="2"><label for="recall-2">Story with no clickable links but information added at the end</label></li>
-						<li><radio name="recall" id="recall-3" value="3"><label for="recall-3">Story with no extra information</label></li>
+						<li><input type="radio" name="recall" id="recall-1" value="1"><label for="recall-1">Story with clickable links to information</label></li>
+						<li><input type="radio" name="recall" id="recall-2" value="2"><label for="recall-2">Story with no clickable links but information added at the end</label></li>
+						<li><input type="radio" name="recall" id="recall-3" value="3"><label for="recall-3">Story with no extra information</label></li>
 					</ul>
 				</li>
 				<li><p>What, if anything, would you have liked to see in the story that it did not contain?</p></li>
-				<li><textarea name="story-feedback" id="story-feedback"></textarea></li>
+				<li><textarea name="feedback" id="story-feedback"></textarea></li>
 				<li><input type="submit"></li>
 			</ul>
 		</form>
