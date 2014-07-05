@@ -2,6 +2,12 @@
 <html>
 	<head>
 		<title>Gun Control: The Great Debate</title>
+		<style>
+			#story { width: 860px; margin: auto; border: 1px solid black; padding: 20px; }
+			#continue { width: 860px; margin: auto; padding: 20px; text-align: center; }
+			#continue a { color: blue; font-weight: bold; }
+			body { font-family: verdana; }
+		</style>
 	</head>
 	<body>
 		<div id="story">

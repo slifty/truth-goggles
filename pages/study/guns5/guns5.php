@@ -2,6 +2,16 @@
 <html>
 	<head>
 		<title>Gun Control: The Great Debate</title>
+		<style>
+			#story { width: 860px; margin: auto; border: 1px solid black; border-bottom: none; padding: 20px; }
+			#facts { width: 860px; margin: auto; border: 1px solid black; border-top: none; padding: 20px; }
+			ul { list-style: none; }
+			.statement {font-weight: bold; margin-top: 40px; }
+			img {max-width: 600px; margin: 30px; }
+			#continue { width: 860px; margin: auto; padding: 20px; text-align: center; }
+			#continue a { color: blue; font-weight: bold; }
+			body { font-family: verdana; }
+		</style>
 	</head>
 	<body>
 		<div id="story">
@@ -20,7 +30,7 @@
 		<div id="facts">
 			<ul>
 				<li>
-					<div class="statement">TRUE: sweeping new laws in a handful of Democratic-led states, including Maryland and New York.</div>
+					<div class="statement">TRUE: Sweeping new laws in a handful of Democratic-led states, including Maryland and New York.</div>
 					<div class="explanation">
 						<p>Colorado, Connecticut, Del-aware, Maryland, and New York all enacted legislation to tighten gun control in 2013.</p>
 						<p>Examples of new changes:</p>
@@ -40,7 +50,7 @@
 					</div>
 				</li>
 				<li>
-					<div class="statement">TRUE: more than two dozen states, most of them controlled by Republicans, moved in the opposite direction, expanding the rights of gun owners.</div>
+					<div class="statement">TRUE: More than two dozen states, most of them controlled by Republicans, moved in the opposite direction, expanding the rights of gun owners.</div>
 					<div class="explanation">
 						<p>Alabama, Arizona, Arkansas, Idaho, Kansas, Kentucky, Maine, Mississippi, North Dakota, South Dakota, Tennessee, Utah, Virginia, West Virginia, Wyoming all moved to expand the rights of gun owners</p>
 						<p>Examples of new changes:</p>
@@ -71,13 +81,7 @@
 					</div>
 				</li>
 				<li>
-					<div class="statement">TRUE: Over the past twenty years, the number of homicides committed with a firearm in the United States has decreased by nearly 40 percent.</div>
-					<div class="explanation">
-						<img src='http://i.imgur.com/VkLJIYL.png'/>
-					</div>
-				</li>
-				<li>
-					<div class="statement">TRUE: the jurisdictions with the strictest gun control laws do not always have the highest crime rates or the highest murder rates.</div>
+					<div class="statement">TRUE: The jurisdictions with the strictest gun control laws do not always have the highest crime rates or the highest murder rates.</div>
 					<div class="explanation">
 						<p>There are multiple examples -- among cities, states and nations -- making this claim true. Stats from the FBI and United Nations alongside varied assessments of the "strictest" laws show that that America's two strictest cities (Washington, D.C., and Chicago) don't have the highest murder rates, that most U.S. states with "tight" gun laws fall toward the middle or bottom of the pack in crime and murder rates, and that of five nations regarded as having stringent laws, four had low murder rates and one had the world's 10th highest murder rate.</p>
 					</div>

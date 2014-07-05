@@ -2,6 +2,15 @@
 <html>
 	<head>
 		<title>Feelings, Food and Genetic Engineering</title>
+		<style>
+			#story { width: 860px; margin: auto; border: 1px solid black; border-bottom: none; padding: 20px; }
+			#facts { width: 860px; margin: auto; border: 1px solid black; border-top: none; padding: 20px; }
+			ul { list-style: none; }
+			.statement {font-weight: bold; margin-top: 40px; }
+			#continue { width: 860px; margin: auto; padding: 20px; text-align: center; }
+			#continue a { color: blue; font-weight: bold; }
+			body { font-family: verdana; }
+		</style>
 	</head>
 	<body>
 		<div id="story">
@@ -51,7 +60,7 @@
 				<li>
 					<div class="statement">TRUE: There are also a wide variety of inedible applications for GMOs outside of food production, ranging from energy generators to providers of transplant organs.</div>
 					<div class="explanation">
-						<p>There are also a wide variety of inedible applications for GMOs outside of food production, ranging from energy generators to providers of transplant organs. Many industries stand to benefit from additional GMO research. Work is currently underway to develop plant-derived vaccine candidates in potatoes and lettuce for hepatitis B virus (HBV), enterotoxigenic Escherichia coli (ETEC), and Norwalk virus. Scientists are also looking into the production of other commercially valuable proteins in plants, such as spider silk protein and polymers that are used in surgery or tissue replacement. Genetically modified animals have even been used to grow transplant tissues and human transplant organs, a concept called xenotransplantation.</p>
+						<p>Many industries stand to benefit from additional GMO research. Work is currently underway to develop plant-derived vaccine candidates in potatoes and lettuce for hepatitis B virus (HBV), enterotoxigenic Escherichia coli (ETEC), and Norwalk virus. Scientists are also looking into the production of other commercially valuable proteins in plants, such as spider silk protein and polymers that are used in surgery or tissue replacement. Genetically modified animals have even been used to grow transplant tissues and human transplant organs, a concept called xenotransplantation.</p>
 					</div>
 				</li>
 			</ul>
