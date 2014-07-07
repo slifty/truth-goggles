@@ -72,6 +72,9 @@
 	margin-bottom: 40px;
 	font-family: arial;
 }
+.gogglesArgument img {
+	max-width: 500px;
+}
 .gogglesArgumentSummary {
 	font-weight: normal;
 	font-family: arial;
