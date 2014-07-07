@@ -26,7 +26,7 @@
 					<li><p>Please rate the story you just read on the following:</p></li>
 					<li>
 						<table class="seven">
-							<tr><th></th><th>Not at all</th><th colspan="5"></th><th>A lot</th></tr>
+							<tr><th></th><th>Not at all</th><th colspan="5"></th><th>Very</th></tr>
 							<tr>
 								<td>Believable</td>
 								<td><input type="radio" name="story-believable" value="1"></td>
@@ -152,7 +152,7 @@
 					<li><p>Please rate the journalist who wrote the story you just read on the following:</p></li>
 					<li>
 						<table class="seven">
-							<tr><th></th><th>Not at all</th><th colspan="5"></th><th>A lot</th></tr>
+							<tr><th></th><th>Not at all</th><th colspan="5"></th><th>Very</th></tr>
 							<tr>
 								<td>Believable</td>
 								<td><input type="radio" name="journalist-believable" value="1"></td>
@@ -238,7 +238,7 @@
 					<li><p>How positive was the article about <?php echo($_SESSION['previous_topic']);?>?</p></li>
 					<li>
 						<table class="seven">
-							<tr><th></th><th>Not at all</th><th colspan="5"></th><th>A lot</th></tr>
+							<tr><th></th><th>Not at all</th><th colspan="5"></th><th>Very</th></tr>
 							<tr>
 								<td></td>
 								<td><input type="radio" name="article-positive-2" value="1"></td>
@@ -282,7 +282,7 @@
 					<li><p>Please rate how you felt as you read the story:</p></li>
 					<li>
 						<table class="seven">
-							<tr><th></th><th>Not at all</th><th colspan="5"></th><th>A lot</th></tr>
+							<tr><th></th><th>Not at all</th><th colspan="5"></th><th>Very</th></tr>
 							<tr>
 								<td>Angry</td>
 								<td><input type="radio" name="feel-angry" value="1"></td>
