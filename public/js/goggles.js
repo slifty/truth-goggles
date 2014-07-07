@@ -13,7 +13,9 @@ function loadGogglesPlugin(jQuery, queuedCall) {
             defaults = {
                 layerId: 0,
                 mode: "goggles",
-                server: "http://truthgoggl.es"
+                server: "http://truthgoggl.es",
+                userId: 0,
+                trackUrl: ""
             };
 
         // The actual plugin constructor
@@ -179,7 +181,31 @@ function loadGogglesPlugin(jQuery, queuedCall) {
                     .click(function() {
                         $modal.remove();
                         $background.remove();
+
+                        if(self.options.trackUrl != "") {
+                            $.ajax({
+                                url: self.options.trackUrl,
+                                method: "get",
+                                data: {
+                                    c: contribution.id,
+                                    a: "close",
+                                    u: self.options.userId
+                                }
+                            })
+                        }
                     });
+
+                if(self.options.trackUrl != "") {
+                    $.ajax({
+                        url: self.options.trackUrl,
+                        method: "get",
+                        data: {
+                            c: contribution.id,
+                            a: "open",
+                            u: self.options.userId
+                        }
+                    })
+                }
 
                 $background.fadeIn();
                 $modal.fadeIn();
