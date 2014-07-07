@@ -1,4 +1,4 @@
-<?php array_push($_SESSION['order'], 'survey'); ?>
+<?php session_start(); ?>
 <html>
 	<head>
 		<title>Feelings, Food and Genetic Engineering</title>

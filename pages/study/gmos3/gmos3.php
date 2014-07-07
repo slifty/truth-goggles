@@ -1,13 +1,14 @@
+<?php session_start(); ?>
 <html>
 	<head>
 		<title>Feelings, Food and Genetic Engineering</title>
-		<script src="//new.truthgoggl.es/js/goggles.js"></script><script>truthGoggles({server: "//new.truthgoggl.es",layerId: 70});</script>
 		<style>
 			#story { width: 860px; margin: auto; border: 1px solid black; padding: 20px; }
 			#continue { width: 860px; margin: auto; padding: 20px; text-align: center; }
 			#continue a { color: blue; font-weight: bold; }
 			body { font-family: verdana; }
 		</style>
+		<script src="//new.truthgoggl.es/js/goggles.js"></script><script>truthGoggles({server: "//new.truthgoggl.es",layerId: 83,userId:<?php echo($_SESSION['participant_id']); ?>, trackUrl: "<?php echo($GOGGLES_DIRECTORY); ?>/api/track"} );</script>
 	</head>
 	<body>
 		<div id="story">

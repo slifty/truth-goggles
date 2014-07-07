@@ -67,42 +67,83 @@
 	}
 
 	$target = $BASE_DIRECTORY;
+
 	switch($next) {
 		case "1":
 			$target .= "study/gmos1";
 			$_SESSION['previous_topic'] = "GMOs";
 			array_push($_SESSION['order'], 'survey');
+
+			$event = new Event();
+			$event->setParticipantID($_SESSION['participant_id']);
+			$event->setType("start");
+			$event->setContributionID(1);
+			$event->save();
 			break;
 		case "2":
 			$target .= "study/gmos2";
 			$_SESSION['previous_topic'] = "GMOs";
 			array_push($_SESSION['order'], 'survey');
+			$event = new Event();
+			$event->setParticipantID($_SESSION['participant_id']);
+			$event->setType("start");
+			$event->setContributionID(2);
+			$event->save();
 			break;
 		case "3":
 			$target .= "study/gmos3";
 			$_SESSION['previous_topic'] = "GMOs";
 			array_push($_SESSION['order'], 'survey');
+			$event = new Event();
+			$event->setParticipantID($_SESSION['participant_id']);
+			$event->setType("start");
+			$event->setContributionID(3);
+			$event->save();
 			break;
 		case "4":
 			$target .= "study/guns4";
 			$_SESSION['previous_topic'] = "guns";
 			array_push($_SESSION['order'], 'survey');
+			$event = new Event();
+			$event->setParticipantID($_SESSION['participant_id']);
+			$event->setType("start");
+			$event->setContributionID(4);
+			$event->save();
 			break;
 		case "5":
 			$target .= "study/guns5";
 			$_SESSION['previous_topic'] = "guns";
 			array_push($_SESSION['order'], 'survey');
+			$event = new Event();
+			$event->setParticipantID($_SESSION['participant_id']);
+			$event->setType("start");
+			$event->setContributionID(5);
+			$event->save();
 			break;
 		case "6":
 			$target .= "study/guns6";
 			$_SESSION['previous_topic'] = "guns";
 			array_push($_SESSION['order'], 'survey');
+			$event = new Event();
+			$event->setParticipantID($_SESSION['participant_id']);
+			$event->setType("start");
+			$event->setContributionID(6);
+			$event->save();
 			break;
 		case "exit":
 			$target .= "study/exit";
+			$event = new Event();
+			$event->setParticipantID($_SESSION['participant_id']);
+			$event->setType("exit");
+			$event->save();
 			break;
 		case "survey":
 			$target .= "study/survey";
+			$event = new Event();
+			$event->setParticipantID($_SESSION['participant_id']);
+			$event->setType("survey");
+			$event->setContributionID((int)$_SESSION['previous']);
+			$event->save();
 			break;
 		default:
 			$target .= "study/thanks";

@@ -1,4 +1,4 @@
-<?php array_push($_SESSION['order'], 'survey'); ?>
+<?php session_start(); ?>
 <html>
 	<head>
 		<title>Feelings, Food and Genetic Engineering</title>
@@ -30,7 +30,7 @@
 				<li>
 					<div class="statement">TRUE: Modified cotton seeds have been designed to help the resulting plants withstand insect attacks, which allows farmers to avoid use of synthetic chemicals and other pesticides.</div>
 					<div class="explanation">
-						<p>Pest resistance can be extremely costly, requiring farmers to spend a lot of time and money on pesticides.  Additionally, these pesticides bring about numerous hazards for farm workers themselves and can encroach on consumers’ health.  GMOs are helpful in curbing these problems because they help eliminate the need for pesticides in the harvesting process.</p>
+						<p>Pest resistance can be extremely costly, requiring farmers to spend a lot of time and money on pesticides.  Additionally, these pesticides bring about numerous hazards for farm workers themselves and can encroach on consumers' health.  GMOs are helpful in curbing these problems because they help eliminate the need for pesticides in the harvesting process.</p>
 					</div>
 				</li>
 				<li>
@@ -42,7 +42,7 @@
 				<li>
 					<div class="statement">TRUE: This regulation is opt-in, meaning there is no centralized government body responsible for evaluating the products.</div>
 					<div class="explanation">
-						<p>The FDA policy places responsibility on the producer or manufacturer to assure the safety of the food, explicitly relying on the producer/manufacturer to do so: “Ultimately, it is the responsibility of the producer of a new food to evaluate the safety of the food and assure that the safety requirement of section 402(a)(1) of the act is met.” So it is the company, not any independent scientific review, providing the research that is relied on to assert safety. FDA guidance to industry issued in 1997 covered voluntary “consultation procedures,” but still relied on the developer of the product to provide safety data.</p>
+						<p>The FDA policy places responsibility on the producer or manufacturer to assure the safety of the food, explicitly relying on the producer/manufacturer to do so: "Ultimately, it is the responsibility of the producer of a new food to evaluate the safety of the food and assure that the safety requirement of section 402(a)(1) of the act is met." So it is the company, not any independent scientific review, providing the research that is relied on to assert safety. FDA guidance to industry issued in 1997 covered voluntary "consultation procedures," but still relied on the developer of the product to provide safety data.</p>
 					</div>
 				</li>
 				<li>
@@ -54,7 +54,7 @@
 				<li>
 					<div class="statement">TRUE: So far the promise of increased food production has turned out, for a number of reasons, to have been somewhat empty.</div>
 					<div class="explanation">
-						<p>It’s not clear whether that boom in transgenic crops has led to increased food production or lower prices for consumers. Take corn, for example. In the United States, 76 percent of the crop is genetically modified to resist insects, and 85 percent can tolerate being sprayed with a weed killer. Such corn has, arguably, been a boon to farmers, reducing pesticide use and boosting yields. But little of U.S. corn production is used directly for human food; about 4 percent goes into high–fructose corn syrup and 1.8 percent to cereal and other foods. Genetically modified corn and soybeans are so profitable that U.S. farmers have begun substituting them for wheat: around 56 million acres of wheat were planted in 2012, down from 62 million in 2000. As supply fell, the price of a bushel of wheat rose to nearly $8 in 2012, from $2.50 in 2000.</p>
+						<p>It's not clear whether that boom in transgenic crops has led to increased food production or lower prices for consumers. Take corn, for example. In the United States, 76 percent of the crop is genetically modified to resist insects, and 85 percent can tolerate being sprayed with a weed killer. Such corn has, arguably, been a boon to farmers, reducing pesticide use and boosting yields. But little of U.S. corn production is used directly for human food; about 4 percent goes into high–fructose corn syrup and 1.8 percent to cereal and other foods. Genetically modified corn and soybeans are so profitable that U.S. farmers have begun substituting them for wheat: around 56 million acres of wheat were planted in 2012, down from 62 million in 2000. As supply fell, the price of a bushel of wheat rose to nearly $8 in 2012, from $2.50 in 2000.</p>
 					</div>
 				</li>
 				<li>

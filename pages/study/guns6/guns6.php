@@ -1,4 +1,4 @@
-<?php array_push($_SESSION['order'], 'survey'); ?>
+<?php session_start(); ?>
 <html>
 	<head>
 		<title>Gun Control: The Great Debate</title>
@@ -8,6 +8,7 @@
 			#continue a { color: blue; font-weight: bold; }
 			body { font-family: verdana; }
 		</style>
+		<script src="//new.truthgoggl.es/js/goggles.js"></script><script>truthGoggles({server: "//new.truthgoggl.es",layerId: 82,userId:<?php echo($_SESSION['participant_id']); ?>, trackUrl: "<?php echo($GOGGLES_DIRECTORY); ?>/api/track"} );</script>
 	</head>
 	<body>
 		<div id="story">
